@@ -1,6 +1,6 @@
 # WCron
 
-A configurable cron services.
+A job scheduler via RESTful web services.
 
 ## Contributors
 
