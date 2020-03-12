@@ -8,6 +8,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.StringTokenizer;
+import java.util.logging.Logger;
 
 import javax.annotation.Resource;
 
@@ -21,14 +22,14 @@ import javax.ejb.Timer;
 
 import javax.inject.Inject;
 
-import org.apache.log4j.Logger;
+import org.dew.wcron.LoggerFactory;
 
 @Singleton
 @Local(ICronTrigger.class)
 public 
 class CronTrigger implements ICronTrigger
 {
-  protected static Logger logger = Logger.getLogger(CronTrigger.class);
+  protected static Logger logger = LoggerFactory.getLogger(CronTrigger.class);
   
   @Resource
   private TimerService timerService;
@@ -38,7 +39,7 @@ class CronTrigger implements ICronTrigger
   
   @Override
   public boolean schedule(String jobId, String expression) {
-    logger.debug("CronTrigger.schedule(" + jobId + "," + expression + ")...");
+    logger.fine("CronTrigger.schedule(" + jobId + "," + expression + ")...");
     
     if(jobId == null || jobId.length() == 0) {
       return false;
@@ -114,7 +115,7 @@ class CronTrigger implements ICronTrigger
       
     }
     catch(Exception ex) {
-      logger.error("Exception in schedule(" + jobId + "," + expression + ")", ex);
+      logger.severe("Exception in schedule(" + jobId + "," + expression + "): " + ex);
       return false;
     }
     
@@ -123,19 +124,23 @@ class CronTrigger implements ICronTrigger
   
   @Override
   public boolean remove(String jobId) {
+    logger.fine("CronTrigger.remove(" + jobId + ")...");
+    
     Collection<Timer> timers = timerService.getAllTimers();
     
     boolean found = false;
     Iterator<Timer> iterator = timers.iterator();
     while(iterator.hasNext()) {
       Timer timer = iterator.next();
+      
       Object info = timer.getInfo();
       if(info != null && info.equals(jobId)) {
-        iterator.remove();
+        timer.cancel();
         found = true;
       }
     }
     
+    logger.fine("CronTrigger.remove(" + jobId + ") -> " + found);
     return found;
   }
   
@@ -146,7 +151,7 @@ class CronTrigger implements ICronTrigger
     
     JobInfo jobInfo = cronManager.getJob(jobId);
     if(jobInfo == null || jobInfo.getActivity() == null) {
-      logger.warn("Invalid jobId " + jobId);
+      logger.warning("Invalid jobId " + jobId);
       return;
     }
     
@@ -154,22 +159,22 @@ class CronTrigger implements ICronTrigger
     
     String uri = activity.getUri();
     if(uri == null || uri.length() == 0) {
-      logger.warn("Invalid activity " + activity.getName());
+      logger.warning("Invalid activity " + activity.getName());
       return;
     }
     
     if(jobInfo.isRunning()) {
-      logger.warn("Job " + jobId + " is running");
+      logger.warning("Job " + jobId + " is running");
       return;
     }
     if(jobInfo.isRequestInterrupt()) {
-      logger.warn("Job " + jobId + " is managing interrupt request");
+      logger.warning("Job " + jobId + " is managing interrupt request");
       return;
     }
     
     IJob job = createJobInstance(uri);
     if(job == null) {
-      logger.warn("Invalid uri activity " + activity.getName() + ", uri=" + uri);
+      logger.warning("Invalid uri activity " + activity.getName() + ", uri=" + uri);
       return;
     }
     
@@ -178,10 +183,10 @@ class CronTrigger implements ICronTrigger
     jobInfo.setLastException("");
     jobInfo.setRunning(true);
     try {
-      logger.debug("[" + jobId + "].init(" + jobInfo + ")...");
+      logger.fine("[" + jobId + "].init(" + jobInfo + ")...");
       job.init(jobInfo);
       
-      logger.debug("[" + jobId + "].execute(" + activity.getParameters() + ")...");
+      logger.fine("[" + jobId + "].execute(" + activity.getParameters() + ")...");
       result = job.execute(activity.getParameters());
       
       jobInfo.setLastResult(result != null ? result.toString() : "null");
@@ -193,18 +198,18 @@ class CronTrigger implements ICronTrigger
     }
     finally {
       try {
-        logger.debug("[" + jobId + "].destroy()...");
+        logger.fine("[" + jobId + "].destroy()...");
         job.destroy();
       }
       catch(Exception ex) {
-        logger.warn("[" + jobId + "].destroy(): " + ex);
+        logger.warning("[" + jobId + "].destroy(): " + ex);
       }
       jobInfo.setRunning(false);
     }
   }
   
   protected void singleTask(String jobId, long timeout) {
-    logger.debug("CronTrigger.singleTask(" + jobId + "," + timeout + ")...");
+    logger.fine("CronTrigger.singleTask(" + jobId + "," + timeout + ")...");
     
     TimerConfig timerConfig = new TimerConfig();
     timerConfig.setPersistent(false);
@@ -213,7 +218,7 @@ class CronTrigger implements ICronTrigger
   }
   
   protected void intervalTask(String jobId, long timeout, long interval) {
-    logger.debug("CronTrigger.intervalTask(" + jobId + "," + timeout + "," + interval + ")...");
+    logger.fine("CronTrigger.intervalTask(" + jobId + "," + timeout + "," + interval + ")...");
     
     TimerConfig timerConfig = new TimerConfig();
     timerConfig.setPersistent(false);
@@ -222,7 +227,7 @@ class CronTrigger implements ICronTrigger
   }
   
   protected void singleTask(String jobId, Date timeout) {
-    logger.debug("CronTrigger.singleTask(" + jobId + "," + timeout + ")...");
+    logger.fine("CronTrigger.singleTask(" + jobId + "," + timeout + ")...");
     
     TimerConfig timerConfig = new TimerConfig();
     timerConfig.setPersistent(false);
@@ -231,7 +236,7 @@ class CronTrigger implements ICronTrigger
   }
   
   protected void intervalTask(String jobId, Date timeout, long interval) {
-    logger.debug("CronTrigger.intervalTask(" + jobId + "," + timeout + "," + interval + ")...");
+    logger.fine("CronTrigger.intervalTask(" + jobId + "," + timeout + "," + interval + ")...");
     
     TimerConfig timerConfig = new TimerConfig();
     timerConfig.setPersistent(false);
@@ -240,7 +245,7 @@ class CronTrigger implements ICronTrigger
   }
   
   protected void calendarTask(String jobId, ScheduleExpression scheduleExpression) {
-    logger.debug("CronTrigger.calendarTask(" + jobId + "," + scheduleExpression + ")...");
+    logger.fine("CronTrigger.calendarTask(" + jobId + "," + scheduleExpression + ")...");
     
     TimerConfig timerConfig = new TimerConfig();
     timerConfig.setPersistent(false);
@@ -265,7 +270,7 @@ class CronTrigger implements ICronTrigger
       }
     }
     catch(Exception ex) {
-      logger.debug("CronTrigger.createJobInstance(" + uri + "): " + ex);
+      logger.severe("CronTrigger.createJobInstance(" + uri + "): " + ex);
       return null;
     }
     return null;

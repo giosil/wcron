@@ -7,9 +7,11 @@ import java.util.concurrent.atomic.AtomicInteger;
 import javax.ejb.Local;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.interceptor.Interceptors;
 
 @Stateless
 @Local(ICronManager.class)
+@Interceptors(AuditInterceptor.class)
 public 
 class CronManager implements ICronManager 
 {
@@ -69,9 +71,7 @@ class CronManager implements ICronManager
     
     Activity activity = activities.get(activityName);
     
-    if(activity == null) {
-      return "";
-    }
+    if(activity == null) return "";
     
     String jobId = nextId();
     
@@ -89,11 +89,11 @@ class CronManager implements ICronManager
   
   @Override
   public boolean removeJob(String jobId) {
-    cronTrigger.remove(jobId);
+    boolean removed = cronTrigger.remove(jobId);
     
-    jobs.remove(jobId);
+    if(removed) jobs.remove(jobId);
     
-    return true;
+    return removed;
   }
 
   @Override

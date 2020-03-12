@@ -3,6 +3,8 @@ package org.dew.wcron.rest;
 import java.util.HashMap;
 import java.util.Map;
 
+import java.util.logging.Logger;
+
 import javax.inject.Inject;
 
 import javax.ws.rs.Consumes;
@@ -15,8 +17,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 
-import org.apache.log4j.Logger;
-
+import org.dew.wcron.LoggerFactory;
 import org.dew.wcron.model.Activity;
 import org.dew.wcron.model.ICronManager;
 import org.dew.wcron.model.JobInfo;
@@ -25,7 +26,7 @@ import org.dew.wcron.model.JobInfo;
 public 
 class RESTCronManager 
 {
-  protected static Logger logger = Logger.getLogger(RESTCronManager.class);
+  protected static Logger logger = LoggerFactory.getLogger(RESTCronManager.class);
   
   @Context
   protected UriInfo context;
@@ -39,7 +40,7 @@ class RESTCronManager
   public 
   Map<String,Object> info() 
   {
-    logger.debug("RESTManager.info()...");
+    logger.fine("RESTManager.info()...");
     
     Map<String,Object> mapResult = new HashMap<String, Object>();
     mapResult.put("name", RESTApp.NAME);
@@ -53,7 +54,7 @@ class RESTCronManager
   public 
   Activity[] listActivities() 
   {
-    logger.debug("RESTManager.listActivities()...");
+    logger.fine("RESTManager.listActivities()...");
     
     return cronManager.listActivities();
   }
@@ -65,7 +66,7 @@ class RESTCronManager
   public 
   boolean addActivity(Activity activity) 
   {
-    logger.debug("RESTManager.addActivity(" + activity + ")...");
+    logger.fine("RESTManager.addActivity(" + activity + ")...");
     
     return cronManager.addActivity(activity);
   }
@@ -76,7 +77,7 @@ class RESTCronManager
   public 
   boolean removeActivity(@PathParam("activityName") String activityName) 
   {
-    logger.debug("RESTManager.removeActivity(" + activityName + ")...");
+    logger.fine("RESTManager.removeActivity(" + activityName + ")...");
     
     return cronManager.removeActivity(activityName);
   }
@@ -87,7 +88,7 @@ class RESTCronManager
   public 
   String schedule(@PathParam("activityName") String activityName, @PathParam("expression") String expression)
   {
-    logger.debug("RESTManager.schedule(" + activityName + "," + expression + ")...");
+    logger.fine("RESTManager.schedule(" + activityName + "," + expression + ")...");
     
     return cronManager.schedule(activityName, expression);
   }
@@ -98,7 +99,7 @@ class RESTCronManager
   public 
   boolean removeJob(@PathParam("jobId") String jobId)
   {
-    logger.debug("RESTManager.removeJob(" + jobId + ")...");
+    logger.fine("RESTManager.removeJob(" + jobId + ")...");
     
     return cronManager.removeJob(jobId);
   }
@@ -109,7 +110,7 @@ class RESTCronManager
   public 
   JobInfo getJob(@PathParam("jobId") String jobId)
   {
-    logger.debug("RESTManager.getJob(" + jobId + ")...");
+    logger.fine("RESTManager.getJob(" + jobId + ")...");
     
     return cronManager.getJob(jobId);
   }
@@ -120,7 +121,7 @@ class RESTCronManager
   public 
   JobInfo[] listJobs()
   {
-    logger.debug("RESTManager.listJobs()...");
+    logger.fine("RESTManager.listJobs()...");
     
     return cronManager.listJobs();
   }

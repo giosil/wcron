@@ -2,27 +2,29 @@ package org.dew.wcron.model;
 
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
+
+import org.dew.wcron.LoggerFactory;
 
 public 
 class JobMock implements IJob
 {
-  protected static Logger logger = Logger.getLogger(JobMock.class);
+  protected static Logger logger = LoggerFactory.getLogger(CronTrigger.class);
   
   @Override
   public void init(JobInfo jobInfo) throws Exception {
-    logger.debug("JobMock.init(" + jobInfo + ")");
+    logger.fine("JobMock.init(" + jobInfo + ")");
   }
 
   @Override
   public Object execute(Map<String, Object> parameters) throws Exception {
     Object result = System.currentTimeMillis();
-    logger.debug("JobMock.execute(" + parameters + ") -> " + result);
+    logger.fine("JobMock.execute(" + parameters + ") -> " + result);
     return result;
   }
 
   @Override
   public void destroy() throws Exception {
-    logger.debug("JobMock.destroy()");
+    logger.fine("JobMock.destroy()");
   }
 }
