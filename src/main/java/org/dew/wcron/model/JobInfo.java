@@ -1,19 +1,21 @@
 package org.dew.wcron.model;
 
 import java.io.Serializable;
+import java.util.Map;
 
 public 
 class JobInfo implements Serializable, Comparable<JobInfo>
 {
-  private static final long serialVersionUID = 7155247851232441913L;
+  private static final long serialVersionUID = 431852672063546967L;
   
-  protected String id;
-  protected Activity activity;
-  protected String expression;
-  protected boolean running;
-  protected boolean requestInterrupt;
-  protected String lastResult;
-  protected String lastException;
+  private String id;
+  private Activity activity;
+  private String expression;
+  private Map<String,Object> parameters;
+  private boolean running;
+  private boolean requestInterrupt;
+  private String lastResult;
+  private String lastException;
   
   public JobInfo()
   {
@@ -25,7 +27,15 @@ class JobInfo implements Serializable, Comparable<JobInfo>
     this.activity = activity;
     this.expression = expression;
   }
-
+  
+  public JobInfo(String id, Activity activity, String expression, Map<String,Object> parameters)
+  {
+    this.id = id;
+    this.activity = activity;
+    this.expression = expression;
+    this.parameters = parameters;
+  }
+  
   public String getId() {
     return id;
   }
@@ -48,6 +58,14 @@ class JobInfo implements Serializable, Comparable<JobInfo>
 
   public void setExpression(String expression) {
     this.expression = expression;
+  }
+
+  public Map<String, Object> getParameters() {
+    return parameters;
+  }
+
+  public void setParameters(Map<String, Object> parameters) {
+    this.parameters = parameters;
   }
 
   public boolean isRunning() {
@@ -81,7 +99,7 @@ class JobInfo implements Serializable, Comparable<JobInfo>
   public void setLastException(String lastException) {
     this.lastException = lastException;
   }
-
+  
   @Override
   public int compareTo(JobInfo object) {
     if(object == null) return -1;

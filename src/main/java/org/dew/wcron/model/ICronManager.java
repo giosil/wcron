@@ -1,5 +1,7 @@
 package org.dew.wcron.model;
 
+import java.util.Map;
+
 import javax.ejb.Local;
 
 @Local
@@ -13,6 +15,8 @@ interface ICronManager
   public boolean removeActivity(String activityName);
   
   public String schedule(String activityName, String expression);
+  
+  public String schedule(String activityName, String expression, Map<String, Object> parameters);
   
   public boolean removeJob(String jobId);
   

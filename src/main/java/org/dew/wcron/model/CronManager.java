@@ -1,5 +1,6 @@
 package org.dew.wcron.model;
 
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import java.util.concurrent.atomic.AtomicInteger;
@@ -61,6 +62,13 @@ class CronManager implements ICronManager
   
   @Override
   public String schedule(String activityName, String expression) {
+    
+    return schedule(activityName, expression, null);
+  
+  }
+  
+  @Override
+  public String schedule(String activityName, String expression, Map<String,Object> parameters) {
     if(activityName == null || activityName.length() == 0) {
       return "";
     }
@@ -75,7 +83,7 @@ class CronManager implements ICronManager
     
     String jobId = nextId();
     
-    jobs.put(jobId, new JobInfo(jobId, activity, expression));
+    jobs.put(jobId, new JobInfo(jobId, activity, expression, parameters));
     
     boolean scheduled = cronTrigger.schedule(jobId, expression);
     

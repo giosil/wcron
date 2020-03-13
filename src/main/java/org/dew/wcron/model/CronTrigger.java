@@ -6,7 +6,9 @@ import java.text.SimpleDateFormat;
 
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.logging.Logger;
 
@@ -186,8 +188,22 @@ class CronTrigger implements ICronTrigger
       logger.fine("[" + jobId + "].init(" + jobInfo + ")...");
       job.init(jobInfo);
       
-      logger.fine("[" + jobId + "].execute(" + activity.getParameters() + ")...");
-      result = job.execute(activity.getParameters());
+      // Execution parameters
+      Map<String,Object> parameters = new HashMap<String, Object>();
+      
+      // Activity parameters
+      Map<String,Object> actParameters = activity.getParameters();
+      if(actParameters != null && !actParameters.isEmpty()) {
+        parameters.putAll(actParameters);
+      }
+      // Job parameters
+      Map<String,Object> jobParameters = jobInfo.getParameters();
+      if(jobParameters != null && !jobParameters.isEmpty()) {
+        parameters.putAll(jobParameters);
+      }
+      
+      logger.fine("[" + jobId + "].execute(" + parameters + ")...");
+      result = job.execute(parameters);
       
       jobInfo.setLastResult(result != null ? result.toString() : "null");
       jobInfo.setLastException("");

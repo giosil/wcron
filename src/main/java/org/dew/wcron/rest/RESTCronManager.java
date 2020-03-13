@@ -115,6 +115,21 @@ class RESTCronManager
     return cronManager.schedule(activityName, expression);
   }
   
+  @POST
+  @Path("/schedule/{activityName}/{expression}")
+  @Consumes(MediaType.APPLICATION_JSON)
+  @Produces(MediaType.APPLICATION_JSON)
+  @WSecure
+  public 
+  String schedule(@PathParam("activityName") String activityName, @PathParam("expression") String expression, Map<String, Object> parameters)
+  {
+    Principal principal = securityContext.getUserPrincipal();
+    
+    logger.fine("[" + principal + "] RESTManager.schedule(" + activityName + "," + expression + "," + parameters + ")...");
+    
+    return cronManager.schedule(activityName, expression, parameters);
+  }
+  
   @GET
   @Path("/removeJob/{jobId}")
   @Produces(MediaType.APPLICATION_JSON)
