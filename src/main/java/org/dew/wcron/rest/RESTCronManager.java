@@ -1,5 +1,6 @@
 package org.dew.wcron.rest;
 
+import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,11 +14,14 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriInfo;
 
 import org.dew.wcron.LoggerFactory;
+import org.dew.wcron.auth.WSecure;
 import org.dew.wcron.model.Activity;
 import org.dew.wcron.model.ICronManager;
 import org.dew.wcron.model.JobInfo;
@@ -31,16 +35,22 @@ class RESTCronManager
   @Context
   protected UriInfo context;
   
+  @Context
+  SecurityContext securityContext;
+  
   @Inject
   protected ICronManager cronManager;
   
   @GET
   @Path("/info")
   @Produces(MediaType.APPLICATION_JSON)
+  @WSecure
   public 
   Map<String,Object> info() 
   {
-    logger.fine("RESTManager.info()...");
+    Principal principal = securityContext.getUserPrincipal();
+    
+    logger.fine("[" + principal + "] RESTManager.info()...");
     
     Map<String,Object> mapResult = new HashMap<String, Object>();
     mapResult.put("name", RESTApp.NAME);
@@ -51,10 +61,13 @@ class RESTCronManager
   @GET
   @Path("/listActivities")
   @Produces(MediaType.APPLICATION_JSON)
+  @WSecure
   public 
-  Activity[] listActivities() 
+  Activity[] listActivities()
   {
-    logger.fine("RESTManager.listActivities()...");
+    Principal principal = securityContext.getUserPrincipal();
+    
+    logger.fine("[" + principal + "] RESTManager.listActivities()...");
     
     return cronManager.listActivities();
   }
@@ -63,10 +76,13 @@ class RESTCronManager
   @Path("/addActivity")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
+  @WSecure
   public 
   boolean addActivity(Activity activity) 
   {
-    logger.fine("RESTManager.addActivity(" + activity + ")...");
+    Principal principal = securityContext.getUserPrincipal();
+    
+    logger.fine("[" + principal + "] RESTManager.addActivity(" + activity + ")...");
     
     return cronManager.addActivity(activity);
   }
@@ -74,10 +90,13 @@ class RESTCronManager
   @GET
   @Path("/removeActivity/{activityName}")
   @Produces(MediaType.APPLICATION_JSON)
+  @WSecure
   public 
   boolean removeActivity(@PathParam("activityName") String activityName) 
   {
-    logger.fine("RESTManager.removeActivity(" + activityName + ")...");
+    Principal principal = securityContext.getUserPrincipal();
+    
+    logger.fine("[" + principal + "] RESTManager.removeActivity(" + activityName + ")...");
     
     return cronManager.removeActivity(activityName);
   }
@@ -85,10 +104,13 @@ class RESTCronManager
   @GET
   @Path("/schedule/{activityName}/{expression}")
   @Produces(MediaType.APPLICATION_JSON)
+  @WSecure
   public 
   String schedule(@PathParam("activityName") String activityName, @PathParam("expression") String expression)
   {
-    logger.fine("RESTManager.schedule(" + activityName + "," + expression + ")...");
+    Principal principal = securityContext.getUserPrincipal();
+    
+    logger.fine("[" + principal + "] RESTManager.schedule(" + activityName + "," + expression + ")...");
     
     return cronManager.schedule(activityName, expression);
   }
@@ -96,10 +118,13 @@ class RESTCronManager
   @GET
   @Path("/removeJob/{jobId}")
   @Produces(MediaType.APPLICATION_JSON)
+  @WSecure
   public 
   boolean removeJob(@PathParam("jobId") String jobId)
   {
-    logger.fine("RESTManager.removeJob(" + jobId + ")...");
+    Principal principal = securityContext.getUserPrincipal();
+    
+    logger.fine("[" + principal + "] RESTManager.removeJob(" + jobId + ")...");
     
     return cronManager.removeJob(jobId);
   }
@@ -107,10 +132,13 @@ class RESTCronManager
   @GET
   @Path("/getJob/{jobId}")
   @Produces(MediaType.APPLICATION_JSON)
+  @WSecure
   public 
   JobInfo getJob(@PathParam("jobId") String jobId)
   {
-    logger.fine("RESTManager.getJob(" + jobId + ")...");
+    Principal principal = securityContext.getUserPrincipal();
+    
+    logger.fine("[" + principal + "] RESTManager.getJob(" + jobId + ")...");
     
     return cronManager.getJob(jobId);
   }
@@ -118,10 +146,13 @@ class RESTCronManager
   @GET
   @Path("/listJobs")
   @Produces(MediaType.APPLICATION_JSON)
+  @WSecure
   public 
   JobInfo[] listJobs()
   {
-    logger.fine("RESTManager.listJobs()...");
+    Principal principal = securityContext.getUserPrincipal();
+    
+    logger.fine("[" + principal + "] RESTManager.listJobs()...");
     
     return cronManager.listJobs();
   }

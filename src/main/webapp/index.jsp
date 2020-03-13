@@ -10,5 +10,6 @@
 		<br/>
 		<a href="scheduler/manager/info">scheduler/manager/info</a><br/>
 		<a href="scheduler/manager/listActivities">scheduler/manager/listActivities</a><br/>
+		<a href="scheduler/manager/listJobs">scheduler/manager/listJobs</a><br/>
 	</body>
 </html>

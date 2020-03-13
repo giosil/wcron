@@ -2,6 +2,8 @@ package org.dew.wcron.model;
 
 import java.lang.reflect.Array;
 
+import java.security.Principal;
+
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.logging.Level;
@@ -20,41 +22,43 @@ public
 class AuditInterceptor 
 {
   @Resource
-  protected EJBContext ctx;
+  protected EJBContext ejbContext;
   
   @AroundInvoke
   public 
   Object intercept(InvocationContext invocationContext) 
     throws Exception 
   {
-    Object target       = invocationContext.getTarget();
-    String targetClass  = target != null ? target.getClass().getName() : "-";
-    String methodName   = invocationContext.getMethod().getName();
-    Object[] parameters = invocationContext.getParameters();
+    Object target        = invocationContext.getTarget();
+    String targetClass   = target != null ? target.getClass().getName() : "-";
+    String methodName    = invocationContext.getMethod().getName();
+    Object[] parameters  = invocationContext.getParameters();
+    Principal principal  = ejbContext.getCallerPrincipal();
+    String principalName = principal != null ? "<" + principal.getName() + ">" : "";
     
     Logger logger = LoggerFactory.getLogger(targetClass);
-    logger.entering(targetClass, methodName, parameters);
+    logger.entering(targetClass, methodName + principalName, parameters);
     try {
       Object result = invocationContext.proceed();
       
       if(result != null && result.getClass().isArray()) {
-        logger.exiting(targetClass, methodName, formatResult(result));
+        logger.exiting(targetClass, methodName + principalName, formatResult(result));
       }
       else if(result instanceof Collection) {
-        logger.exiting(targetClass, methodName, formatResult(result));
+        logger.exiting(targetClass, methodName + principalName, formatResult(result));
       }
       else {
-        logger.exiting(targetClass, methodName, result);
+        logger.exiting(targetClass, methodName + principalName, result);
       }
       
       return result;
     }
     catch(Exception ex) {
       // throwing use Level.FINER.
-      // logger.throwing(targetClass, methodName + "<" + userName + ">", ex);
+      // logger.throwing(targetClass, methodName + principalName, ex);
       
       // Unexpected exceptions
-      logger.logp(Level.SEVERE, targetClass, methodName, "[AuditInterceptor]", ex);
+      logger.logp(Level.SEVERE, targetClass, methodName + principalName, "[AuditInterceptor]", ex);
       
       throw ex;
     }
