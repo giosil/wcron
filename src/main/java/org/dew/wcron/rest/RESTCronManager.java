@@ -1,6 +1,7 @@
 package org.dew.wcron.rest;
 
 import java.security.Principal;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,12 +17,15 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriInfo;
 
 import org.dew.wcron.LoggerFactory;
+
 import org.dew.wcron.auth.WSecure;
+
 import org.dew.wcron.model.Activity;
 import org.dew.wcron.model.ICronManager;
 import org.dew.wcron.model.JobInfo;
@@ -33,7 +37,10 @@ class RESTCronManager
   protected static Logger logger = LoggerFactory.getLogger(RESTCronManager.class);
   
   @Context
-  protected UriInfo context;
+  UriInfo uriInfo;
+  
+  @Context 
+  HttpHeaders httpHeaders;
   
   @Context
   SecurityContext securityContext;
@@ -50,7 +57,7 @@ class RESTCronManager
   {
     Principal principal = securityContext.getUserPrincipal();
     
-    logger.fine("[" + principal + "] RESTManager.info()...");
+    logger.fine(principal + "@" + uriInfo.getPath() + " RESTManager.info()...");
     
     Map<String,Object> mapResult = new HashMap<String, Object>();
     mapResult.put("name", RESTApp.NAME);
@@ -67,7 +74,7 @@ class RESTCronManager
   {
     Principal principal = securityContext.getUserPrincipal();
     
-    logger.fine("[" + principal + "] RESTManager.listActivities()...");
+    logger.fine(principal + "@" + uriInfo.getPath() + " RESTManager.listActivities()...");
     
     return cronManager.listActivities();
   }
@@ -82,7 +89,7 @@ class RESTCronManager
   {
     Principal principal = securityContext.getUserPrincipal();
     
-    logger.fine("[" + principal + "] RESTManager.addActivity(" + activity + ")...");
+    logger.fine(principal + "@" + uriInfo.getPath() + " RESTManager.addActivity(" + activity + ")...");
     
     return cronManager.addActivity(activity);
   }
@@ -96,7 +103,7 @@ class RESTCronManager
   {
     Principal principal = securityContext.getUserPrincipal();
     
-    logger.fine("[" + principal + "] RESTManager.removeActivity(" + activityName + ")...");
+    logger.fine(principal + "@" + uriInfo.getPath() + " RESTManager.removeActivity(" + activityName + ")...");
     
     return cronManager.removeActivity(activityName);
   }
@@ -110,7 +117,7 @@ class RESTCronManager
   {
     Principal principal = securityContext.getUserPrincipal();
     
-    logger.fine("[" + principal + "] RESTManager.schedule(" + activityName + "," + expression + ")...");
+    logger.fine(principal + "@" + uriInfo.getPath() + " RESTManager.schedule(" + activityName + "," + expression + ")...");
     
     return cronManager.schedule(activityName, expression);
   }
@@ -125,7 +132,7 @@ class RESTCronManager
   {
     Principal principal = securityContext.getUserPrincipal();
     
-    logger.fine("[" + principal + "] RESTManager.schedule(" + activityName + "," + expression + "," + parameters + ")...");
+    logger.fine(principal + "@" + uriInfo.getPath() + " RESTManager.schedule(" + activityName + "," + expression + "," + parameters + ")...");
     
     return cronManager.schedule(activityName, expression, parameters);
   }
@@ -139,7 +146,7 @@ class RESTCronManager
   {
     Principal principal = securityContext.getUserPrincipal();
     
-    logger.fine("[" + principal + "] RESTManager.removeJob(" + jobId + ")...");
+    logger.fine(principal + "@" + uriInfo.getPath() + " RESTManager.removeJob(" + jobId + ")...");
     
     return cronManager.removeJob(jobId);
   }
@@ -153,7 +160,7 @@ class RESTCronManager
   {
     Principal principal = securityContext.getUserPrincipal();
     
-    logger.fine("[" + principal + "] RESTManager.getJob(" + jobId + ")...");
+    logger.fine(principal + "@" + uriInfo.getPath() + " RESTManager.getJob(" + jobId + ")...");
     
     return cronManager.getJob(jobId);
   }
@@ -167,7 +174,7 @@ class RESTCronManager
   {
     Principal principal = securityContext.getUserPrincipal();
     
-    logger.fine("[" + principal + "] RESTManager.listJobs()...");
+    logger.fine(principal + "@" + uriInfo.getPath() + " RESTManager.listJobs()...");
     
     return cronManager.listJobs();
   }
