@@ -16,7 +16,7 @@ import javax.ejb.EJBContext;
 import javax.interceptor.AroundInvoke;
 import javax.interceptor.InvocationContext;
 
-import org.dew.wcron.LoggerFactory;
+import org.dew.wcron.util.LoggerFactory;
 
 public 
 class AuditInterceptor 

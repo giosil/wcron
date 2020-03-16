@@ -1,10 +1,11 @@
-package org.dew.wcron.model;
+package org.dew.wcron.api;
 
 import java.util.Map;
 
 import java.util.logging.Logger;
 
-import org.dew.wcron.LoggerFactory;
+import org.dew.wcron.model.CronTrigger;
+import org.dew.wcron.util.LoggerFactory;
 
 public 
 class JobMock implements IJob

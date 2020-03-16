@@ -1,4 +1,4 @@
-package org.dew.wcron.model;
+package org.dew.wcron.api;
 
 import java.util.Map;
 

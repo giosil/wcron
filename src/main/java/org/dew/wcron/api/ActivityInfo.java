@@ -1,19 +1,21 @@
-package org.dew.wcron.model;
+package org.dew.wcron.api;
 
 import java.io.Serializable;
 
+import java.util.Date;
 import java.util.Map;
 
 public 
-class Activity implements Serializable, Comparable<Activity>
+class ActivityInfo implements Serializable, Comparable<ActivityInfo>
 {
-  private static final long serialVersionUID = 6901959913697392704L;
+  private static final long serialVersionUID = 7270436398766545637L;
   
   private String name;
   private String uri;
   private Map<String,Object> parameters;
+  private Date createdAt;
   
-  public Activity()
+  public ActivityInfo()
   {
   }
   
@@ -41,8 +43,16 @@ class Activity implements Serializable, Comparable<Activity>
     this.parameters = parameters;
   }
 
+  public Date getCreatedAt() {
+    return createdAt;
+  }
+
+  public void setCreatedAt(Date createdAt) {
+    this.createdAt = createdAt;
+  }
+
   @Override
-  public int compareTo(Activity object) {
+  public int compareTo(ActivityInfo object) {
     if(object == null) return -1;
     String sName = object.getName();
     if(name == null) {
@@ -53,8 +63,8 @@ class Activity implements Serializable, Comparable<Activity>
   
   @Override
   public boolean equals(Object object) {
-    if(object instanceof Activity) {
-      String sName = ((Activity) object).getName();
+    if(object instanceof ActivityInfo) {
+      String sName = ((ActivityInfo) object).getName();
       if(sName == null && name == null) return true;
       return sName != null && sName.equals(name);
     }

@@ -1,4 +1,4 @@
-package org.dew.wcron;
+package org.dew.wcron.util;
 
 import java.io.File;
 import java.io.PrintWriter;

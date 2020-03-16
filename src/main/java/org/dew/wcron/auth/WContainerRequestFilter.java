@@ -14,7 +14,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.ext.Provider;
 
-import org.dew.wcron.LoggerFactory;
+import org.dew.wcron.util.LoggerFactory;
 
 @WSecure // NameBinding
 @Provider

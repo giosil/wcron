@@ -1,34 +1,30 @@
-package org.dew.wcron.model;
+package org.dew.wcron.api;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.Map;
 
 public 
 class JobInfo implements Serializable, Comparable<JobInfo>
 {
-  private static final long serialVersionUID = 431852672063546967L;
+  private static final long serialVersionUID = -941277052836157918L;
   
-  private String id;
-  private Activity activity;
+  private long id;
+  private ActivityInfo activity;
   private String expression;
   private Map<String,Object> parameters;
   private boolean running;
   private boolean requestInterrupt;
   private String lastResult;
-  private String lastException;
+  private String lastError;
+  private Date createdAt;
+  private int elapsed;
   
   public JobInfo()
   {
   }
   
-  public JobInfo(String id, Activity activity, String expression)
-  {
-    this.id = id;
-    this.activity = activity;
-    this.expression = expression;
-  }
-  
-  public JobInfo(String id, Activity activity, String expression, Map<String,Object> parameters)
+  public JobInfo(long id, ActivityInfo activity, String expression, Map<String,Object> parameters)
   {
     this.id = id;
     this.activity = activity;
@@ -36,19 +32,19 @@ class JobInfo implements Serializable, Comparable<JobInfo>
     this.parameters = parameters;
   }
   
-  public String getId() {
+  public long getId() {
     return id;
   }
 
-  public void setId(String id) {
+  public void setId(long id) {
     this.id = id;
   }
 
-  public Activity getActivity() {
+  public ActivityInfo getActivity() {
     return activity;
   }
 
-  public void setActivity(Activity activity) {
+  public void setActivity(ActivityInfo activity) {
     this.activity = activity;
   }
 
@@ -92,45 +88,58 @@ class JobInfo implements Serializable, Comparable<JobInfo>
     this.lastResult = lastResult;
   }
 
-  public String getLastException() {
-    return lastException;
+  public String getLastError() {
+    return lastError;
   }
 
-  public void setLastException(String lastException) {
-    this.lastException = lastException;
+  public void setLastError(String lastError) {
+    this.lastError = lastError;
   }
-  
+
+  public Date getCreatedAt() {
+    return createdAt;
+  }
+
+  public void setCreatedAt(Date createdAt) {
+    this.createdAt = createdAt;
+  }
+
+  public int getElapsed() {
+    return elapsed;
+  }
+
+  public void setElapsed(int elapsed) {
+    this.elapsed = elapsed;
+  }
+
   @Override
   public int compareTo(JobInfo object) {
     if(object == null) return -1;
-    String sId = object.getId();
-    if(id == null) {
-      return sId == null ? 0 : 1;
-    }
-    return id.compareTo(sId);
+    long objId = object.getId();
+    if(id == objId) return 0;
+    return id > objId ? 1 : -1;
   }
   
   @Override
   public boolean equals(Object object) {
     if(object instanceof JobInfo) {
-      String sId = ((JobInfo) object).getId();
-      if(sId == null && id == null) return true;
-      return sId != null && sId.equals(id);
+      long objId = ((JobInfo) object).getId();
+      return objId == id;
     }
     return false;
   }
   
   @Override
   public int hashCode() {
-    if(id == null) return 0;
-    return id.hashCode();
+    return new Long(id).hashCode();
   }
   
   @Override
   public String toString() {
+    String activityName = null;
     if(activity != null && activity.getName() != null) {
-      return id + ":" + activity.getName();
+      activityName = activity.getName();
     }
-    return id;
+    return activityName + "#" + id;
   }
 }

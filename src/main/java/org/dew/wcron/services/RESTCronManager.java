@@ -1,4 +1,4 @@
-package org.dew.wcron.rest;
+package org.dew.wcron.services;
 
 import java.security.Principal;
 
@@ -22,13 +22,11 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriInfo;
 
-import org.dew.wcron.LoggerFactory;
-
+import org.dew.wcron.api.ActivityInfo;
+import org.dew.wcron.api.ICronManager;
+import org.dew.wcron.api.JobInfo;
 import org.dew.wcron.auth.WSecure;
-
-import org.dew.wcron.model.Activity;
-import org.dew.wcron.model.ICronManager;
-import org.dew.wcron.model.JobInfo;
+import org.dew.wcron.util.LoggerFactory;
 
 @Path("/manager")
 public 
@@ -62,6 +60,9 @@ class RESTCronManager
     Map<String,Object> mapResult = new HashMap<String, Object>();
     mapResult.put("name", RESTApp.NAME);
     mapResult.put("version", RESTApp.VER);
+    mapResult.put("activities", cronManager.countActivities());
+    mapResult.put("jobs", cronManager.countJobs());
+    
     return mapResult;
   }
   
@@ -70,7 +71,7 @@ class RESTCronManager
   @Produces(MediaType.APPLICATION_JSON)
   @WSecure
   public 
-  Activity[] listActivities()
+  ActivityInfo[] listActivities()
   {
     Principal principal = securityContext.getUserPrincipal();
     
@@ -85,7 +86,7 @@ class RESTCronManager
   @Produces(MediaType.APPLICATION_JSON)
   @WSecure
   public 
-  boolean addActivity(Activity activity) 
+  boolean addActivity(ActivityInfo activity) 
   {
     Principal principal = securityContext.getUserPrincipal();
     
@@ -113,7 +114,7 @@ class RESTCronManager
   @Produces(MediaType.APPLICATION_JSON)
   @WSecure
   public 
-  String schedule(@PathParam("activityName") String activityName, @PathParam("expression") String expression)
+  Long schedule(@PathParam("activityName") String activityName, @PathParam("expression") String expression)
   {
     Principal principal = securityContext.getUserPrincipal();
     
@@ -128,7 +129,7 @@ class RESTCronManager
   @Produces(MediaType.APPLICATION_JSON)
   @WSecure
   public 
-  String schedule(@PathParam("activityName") String activityName, @PathParam("expression") String expression, Map<String, Object> parameters)
+  Long schedule(@PathParam("activityName") String activityName, @PathParam("expression") String expression, Map<String, Object> parameters)
   {
     Principal principal = securityContext.getUserPrincipal();
     
@@ -142,7 +143,7 @@ class RESTCronManager
   @Produces(MediaType.APPLICATION_JSON)
   @WSecure
   public 
-  boolean removeJob(@PathParam("jobId") String jobId)
+  boolean removeJob(@PathParam("jobId") Long jobId)
   {
     Principal principal = securityContext.getUserPrincipal();
     
@@ -156,7 +157,7 @@ class RESTCronManager
   @Produces(MediaType.APPLICATION_JSON)
   @WSecure
   public 
-  JobInfo getJob(@PathParam("jobId") String jobId)
+  JobInfo getJob(@PathParam("jobId") Long jobId)
   {
     Principal principal = securityContext.getUserPrincipal();
     

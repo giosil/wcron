@@ -1,4 +1,4 @@
-package org.dew.wcron.rest;
+package org.dew.wcron.services;
 
 import java.util.HashSet;
 import java.util.Set;
