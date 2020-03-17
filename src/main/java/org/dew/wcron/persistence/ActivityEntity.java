@@ -4,18 +4,18 @@ import java.util.Date;
 
 import javax.persistence.*;
 
-import org.dew.wcron.api.ActivityInfo;
+import org.dew.wcron.api.Activity;
 
 import org.dew.wcron.util.JSONUtils;
 
-@Entity
+@Entity(name="Activity")
 @Table(name="ACTIVITIES")
 @NamedQueries({
-  @NamedQuery(name="Activity.findAll", query="SELECT a FROM Activity a"),
-  @NamedQuery(name="Activity.findById", query="SELECT a FROM Activity a WHERE a.name = :name")
+  @NamedQuery(name="Activities.findAll", query="SELECT a FROM Activity a"),
+  @NamedQuery(name="Activities.findById", query="SELECT a FROM Activity a WHERE a.name = :name")
 })
 public 
-class Activity
+class ActivityEntity
 {
   @Id
   @Column(nullable = false, length=50)
@@ -24,7 +24,7 @@ class Activity
   @Column(nullable = false, length=100)
   private String uri;
   
-  @Column(name="PARAMS", nullable = true, length=255)
+  @Column(name="PARAMS", nullable = true, length=4000)
   private String parameters;
   
   @Temporal(TemporalType.TIMESTAMP)
@@ -35,27 +35,33 @@ class Activity
   @Column(name="UPD_DATE", nullable = true)
   private Date updDate;
   
-  public Activity()
+  public ActivityEntity()
   {
   }
   
-  public Activity(String name)
+  public ActivityEntity(String name)
   {
     this.name = name;
   }
   
-  public Activity(ActivityInfo activityInfo)
+  public ActivityEntity(Activity activity)
   {
-    this.name = activityInfo.getName();
-    this.uri = activityInfo.getUri();
-    this.parameters = JSONUtils.stringify(activityInfo.getParameters());
-    if(this.parameters != null && this.parameters.length() > 255) {
-      this.parameters = this.parameters.substring(0, 255);
+    this(activity, null);
+  }
+  
+  public ActivityEntity(Activity activity, Date updDate)
+  {
+    this.name = activity.getName();
+    this.uri = activity.getUri();
+    this.parameters = JSONUtils.stringify(activity.getParameters());
+    if(this.parameters != null && this.parameters.length() > 4000) {
+      this.parameters = this.parameters.substring(0, 4000);
     }
-    this.insDate = activityInfo.getCreatedAt();
+    this.insDate = activity.getCreatedAt();
     if(this.insDate == null) {
       this.insDate = new Date();
     }
+    this.updDate = updDate;
   }
   
   public String getName() {
@@ -100,8 +106,8 @@ class Activity
 
   @Override
   public boolean equals(Object object) {
-    if(object instanceof Activity) {
-      String sName = ((Activity) object).getName();
+    if(object instanceof ActivityEntity) {
+      String sName = ((ActivityEntity) object).getName();
       if(sName == null && name == null) return true;
       return sName != null && sName.equals(name);
     }

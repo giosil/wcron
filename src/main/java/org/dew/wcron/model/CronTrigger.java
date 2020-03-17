@@ -6,10 +6,11 @@ import java.text.SimpleDateFormat;
 
 import java.util.Collection;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.StringTokenizer;
+
+import java.util.concurrent.Callable;
+
 import java.util.logging.Logger;
 
 import javax.annotation.Resource;
@@ -24,13 +25,13 @@ import javax.ejb.Timer;
 
 import javax.inject.Inject;
 
-import org.dew.wcron.api.ActivityInfo;
+import org.dew.wcron.api.Activity;
 import org.dew.wcron.api.ICronManager;
 import org.dew.wcron.api.ICronTrigger;
-import org.dew.wcron.api.IJob;
-import org.dew.wcron.api.JobInfo;
-import org.dew.wcron.api.JobMock;
+import org.dew.wcron.api.Job;
+
 import org.dew.wcron.util.JSONUtils;
+import org.dew.wcron.util.JobUtils;
 import org.dew.wcron.util.LoggerFactory;
 
 @Singleton
@@ -189,13 +190,13 @@ class CronTrigger implements ICronTrigger
     catch(Exception ex) {
     }
     
-    JobInfo jobInfo = cronManager.getJob(jobId);
-    if(jobInfo == null || jobInfo.getActivity() == null) {
+    Job job = cronManager.getJob(jobId);
+    if(job == null || job.getActivity() == null) {
       logger.warning("Invalid jobId " + jobId);
       return;
     }
     
-    ActivityInfo activity = jobInfo.getActivity();
+    Activity activity = job.getActivity();
     
     String uri = activity.getUri();
     if(uri == null || uri.length() == 0) {
@@ -203,63 +204,49 @@ class CronTrigger implements ICronTrigger
       return;
     }
     
-    if(jobInfo.isRunning()) {
+    if(job.isRunning()) {
       logger.warning("Job " + jobId + " is running");
       return;
     }
-    if(jobInfo.isRequestInterrupt()) {
+    if(job.isRequestInterrupt()) {
       logger.warning("Job " + jobId + " is managing interrupt request");
       return;
     }
     
-    IJob job = createJobInstance(uri);
-    if(job == null) {
-      logger.warning("Invalid uri activity " + activity.getName() + ", uri=" + uri);
-      return;
-    }
+    Date   lastExceution = new Date();
+    String lastResult    = "";
+    String lastError     = "";
+    int    elapsed       = 0;
+    long startTime = lastExceution.getTime();
     
-    Object result = null;
-    jobInfo.setLastResult("");
-    jobInfo.setLastError("");
-    jobInfo.setRunning(true);
+    job.setLastResult("");
+    job.setLastError("");
+    job.setElapsed(0);
+    job.setRunning(true);
     try {
-      logger.fine("[" + jobId + "].init(" + jobInfo + ")...");
-      job.init(jobInfo);
+      Callable<?> callable = JobUtils.createJobInstance(job);
       
-      // Execution parameters
-      Map<String,Object> parameters = new HashMap<String, Object>();
+      logger.fine("[" + jobId + "].call()...");
+      Object result = callable.call();
       
-      // Activity parameters
-      Map<String,Object> actParameters = activity.getParameters();
-      if(actParameters != null && !actParameters.isEmpty()) {
-        parameters.putAll(actParameters);
-      }
-      // Job parameters
-      Map<String,Object> jobParameters = jobInfo.getParameters();
-      if(jobParameters != null && !jobParameters.isEmpty()) {
-        parameters.putAll(jobParameters);
-      }
+      lastResult = JSONUtils.stringify(result);
       
-      logger.fine("[" + jobId + "].execute(" + parameters + ")...");
-      result = job.execute(parameters);
-      
-      jobInfo.setLastResult(JSONUtils.stringify(result));
-      jobInfo.setLastError("");
+      job.setLastResult(lastResult);
     }
     catch(Exception ex) {
-      jobInfo.setLastResult("");
-      jobInfo.setLastError(ex.toString());
+      lastError = ex.toString();
+      job.setLastError(lastError);
+      logger.fine("[" + jobId + "].call(): " + lastError);
     }
     finally {
-      try {
-        logger.fine("[" + jobId + "].destroy()...");
-        job.destroy();
-      }
-      catch(Exception ex) {
-        logger.warning("[" + jobId + "].destroy(): " + ex);
-      }
-      jobInfo.setRunning(false);
+      elapsed = (int) (System.currentTimeMillis() - startTime);
+      
+      job.setElapsed(elapsed);
+      job.setRunning(false);
     }
+    
+    logger.fine("notifyExecution(" + jobId + "," + lastExceution + "," + lastExceution + "," + lastError + "," + elapsed + ")...");
+    cronManager.notifyExecution(jobId, lastExceution, lastResult, lastError, elapsed);
   }
   
   protected void singleTask(String jobId, long timeout) {
@@ -305,28 +292,5 @@ class CronTrigger implements ICronTrigger
     timerConfig.setPersistent(false);
     timerConfig.setInfo(jobId);
     timerService.createCalendarTimer(scheduleExpression, timerConfig);
-  }
-  
-  protected IJob createJobInstance(String uri) {
-    if(uri == null || uri.length() == 0) {
-      return null;
-    }
-    if(uri.equalsIgnoreCase("mock")) {
-      return new JobMock();
-    }
-    try {
-      Class<?> clazz = Class.forName(uri);
-      if(clazz != null) {
-        Object result = clazz.newInstance();
-        if(result instanceof IJob) {
-          return (IJob) result;
-        }
-      }
-    }
-    catch(Exception ex) {
-      logger.severe("CronTrigger.createJobInstance(" + uri + "): " + ex);
-      return null;
-    }
-    return null;
   }
 }

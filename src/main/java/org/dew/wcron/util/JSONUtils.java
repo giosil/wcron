@@ -2,9 +2,11 @@ package org.dew.wcron.util;
 
 import java.io.StringReader;
 import java.io.StringWriter;
+
 import java.lang.reflect.Array;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
@@ -45,22 +47,28 @@ class JSONUtils
   String stringify(Object value)
   {
     if(value == null) return "null";
+    if(value instanceof Number) {
+      return value.toString();
+    }
+    if(value instanceof Boolean) {
+      return value.toString();
+    }
     
-    boolean scalarValue = isScalarValue(value);
+    boolean valueIsObjectOrArray = isObjectOrArray(value);
     
     StringWriter stringWriter = new StringWriter();
     JsonGenerator jsonGenerator = Json.createGenerator(stringWriter);
-    if(scalarValue) {
+    if(!valueIsObjectOrArray) {
       jsonGenerator.writeStartArray();
     }
     write(jsonGenerator, value);
-    if(scalarValue) {
+    if(!valueIsObjectOrArray) {
       jsonGenerator.writeEnd();
     }
     jsonGenerator.close();
     
     String result = stringWriter.toString();
-    if(scalarValue) {
+    if(!valueIsObjectOrArray) {
       result = removeBrackets(result);
     }
     return result;
@@ -69,12 +77,38 @@ class JSONUtils
   public static 
   Object parse(String text)
   {
-    if(text == null || text.length() == 0 || text.equals("null")) {
+    if(text == null) {
       return null;
     }
+    text = text.trim();
+    if(text.length() == 0) {
+      return null;
+    }
+    if(text.equalsIgnoreCase("null")) {
+      return null;
+    }
+    if(text.equalsIgnoreCase("true")) {
+      return Boolean.TRUE;
+    }
+    if(text.equalsIgnoreCase("false")) {
+      return Boolean.FALSE;
+    }
+    char c0 = text.charAt(0);
+    boolean valueIsObjectOrArray = c0 == '{' || c0 == '[';
+    if(!valueIsObjectOrArray) {
+      text = "[" + text + "]";
+    }
+    
     JsonReader reader = Json.createReader(new StringReader(text));
+    
     JsonStructure jsonStructure = reader.read();
-    return toObject(jsonStructure);
+    
+    Object result = toObject(jsonStructure);
+    if(!valueIsObjectOrArray) {
+      result = getFirst(result);
+    }
+    
+    return result;
   }
   
   @SuppressWarnings("unchecked")
@@ -168,7 +202,7 @@ class JSONUtils
     return jsonValue.toString();
   }
   
-  public static 
+  private static 
   List<Object> toList(JsonArray jsonArray)
   {
     if(jsonArray == null) return null;
@@ -177,7 +211,7 @@ class JSONUtils
     return listResult;
   }
   
-  public static 
+  private static 
   Map<String, Object> toMap(JsonObject jsonObject)
   {
     if(jsonObject == null) return null;
@@ -204,6 +238,15 @@ class JSONUtils
       jsonGenerator.writeStartArray();
       Collection<?> collection = (Collection<?>) value;
       collection.forEach(item -> write(jsonGenerator, item));
+      jsonGenerator.writeEnd();
+    }
+    else if(value.getClass().isArray()) {
+      jsonGenerator.writeStartArray();
+      int length = Array.getLength(value);
+      for(int i = 0; i < length; i++) {
+        Object item = Array.get(value, i);
+        write(jsonGenerator, item);
+      }
       jsonGenerator.writeEnd();
     }
     else if(value instanceof String) {
@@ -289,6 +332,15 @@ class JSONUtils
       jsonGenerator.writeStartArray(key);
       Collection<?> collection = (Collection<?>) value;
       collection.forEach(item -> write(jsonGenerator, item));
+      jsonGenerator.writeEnd();
+    }
+    else if(value.getClass().isArray()) {
+      jsonGenerator.writeStartArray(key);
+      int length = Array.getLength(value);
+      for(int i = 0; i < length; i++) {
+        Object item = Array.get(value, i);
+        write(jsonGenerator, item);
+      }
       jsonGenerator.writeEnd();
     }
     else if(value instanceof String) {
@@ -434,7 +486,7 @@ class JSONUtils
     return mapResult;
   }
   
-  public static
+  private static
   List<Object> collectionToNormalizedList(Collection<?> collection)
   {
     if(collection == null) {
@@ -470,7 +522,7 @@ class JSONUtils
     return listResult;
   }
   
-  public static 
+  private static 
   List<Object> arrayToNormalizedList(Object array) 
   {
     if(array == null) {
@@ -512,7 +564,7 @@ class JSONUtils
     return listResult;
   }
   
-  public static
+  private static
   String dateTimeToString(long millis)
   {
     Calendar cal = Calendar.getInstance();
@@ -555,7 +607,7 @@ class JSONUtils
     return sYear + "-" + sMonth + "-" + sDay + "T" + sHour + ":" + sMin + ":" + sSec + "." + sMill + "Z";
   }
   
-  public static
+  private static
   boolean isDateTime(String s)
   {
     boolean boDateTime = false;
@@ -580,7 +632,7 @@ class JSONUtils
     return boDateTime;
   }
   
-  public static
+  private static
   Object stringToDateTime(String s)
   {
     if(s == null || s.length() != acDateTime.length) {
@@ -634,30 +686,23 @@ class JSONUtils
   }
   
   private static 
-  boolean isScalarValue(Object value)
+  boolean isObjectOrArray(Object value)
   {
     if(value == null) {
+      return false;
+    }
+    if(value instanceof Map) {
       return true;
     }
-    if(value instanceof String) {
+    if(value instanceof Collection) {
       return true;
     }
-    if(value instanceof Number) {
+    Class<?> valueClass = value.getClass();
+    if(valueClass.isArray()) {
       return true;
     }
-    if(value instanceof Boolean) {
-      return true;
-    }
-    if(value instanceof Date) {
-      return true;
-    }
-    if(value instanceof Calendar) {
-      return true;
-    }
-    if(value instanceof LocalDate) {
-      return true;
-    }
-    if(value instanceof LocalDateTime) {
+    String valueClassName = valueClass.getName();
+    if(!valueClassName.startsWith("java.")) {
       return true;
     }
     return false;
@@ -675,5 +720,22 @@ class JSONUtils
       return text.substring(1, text.length()-1).trim();
     }
     return text;
+  }
+  
+  private static
+  Object getFirst(Object object)
+  {
+    if(object == null) return null;
+    if(object instanceof Collection) {
+      Iterator<?> iterator = ((Collection<?>) object).iterator();
+      if(iterator.hasNext()) return iterator.next();
+      return null;
+    }
+    else if(object.getClass().isArray()) {
+      int length = Array.getLength(object);
+      if(length == 0) return null;
+      return Array.get(object, 0);
+    }
+    return object;
   }
 }

@@ -5,12 +5,12 @@ import java.util.Date;
 import java.util.Map;
 
 public 
-class JobInfo implements Serializable, Comparable<JobInfo>
+class Job implements Serializable, Comparable<Job>
 {
-  private static final long serialVersionUID = -941277052836157918L;
+  private static final long serialVersionUID = -4319840799598937004L;
   
   private long id;
-  private ActivityInfo activity;
+  private Activity activity;
   private String expression;
   private Map<String,Object> parameters;
   private boolean running;
@@ -20,11 +20,11 @@ class JobInfo implements Serializable, Comparable<JobInfo>
   private Date createdAt;
   private int elapsed;
   
-  public JobInfo()
+  public Job()
   {
   }
   
-  public JobInfo(long id, ActivityInfo activity, String expression, Map<String,Object> parameters)
+  public Job(long id, Activity activity, String expression, Map<String,Object> parameters)
   {
     this.id = id;
     this.activity = activity;
@@ -40,11 +40,11 @@ class JobInfo implements Serializable, Comparable<JobInfo>
     this.id = id;
   }
 
-  public ActivityInfo getActivity() {
+  public Activity getActivity() {
     return activity;
   }
 
-  public void setActivity(ActivityInfo activity) {
+  public void setActivity(Activity activity) {
     this.activity = activity;
   }
 
@@ -113,7 +113,7 @@ class JobInfo implements Serializable, Comparable<JobInfo>
   }
 
   @Override
-  public int compareTo(JobInfo object) {
+  public int compareTo(Job object) {
     if(object == null) return -1;
     long objId = object.getId();
     if(id == objId) return 0;
@@ -122,8 +122,8 @@ class JobInfo implements Serializable, Comparable<JobInfo>
   
   @Override
   public boolean equals(Object object) {
-    if(object instanceof JobInfo) {
-      long objId = ((JobInfo) object).getId();
+    if(object instanceof Job) {
+      long objId = ((Job) object).getId();
       return objId == id;
     }
     return false;

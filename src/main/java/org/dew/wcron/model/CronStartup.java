@@ -31,8 +31,6 @@ public class CronStartup {
   @PreDestroy
   public void destroy() {
     logger.fine("CronStartup.destroy");
-    
-    cronManager.cancelAll();
   }
   
 }

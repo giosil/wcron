@@ -1,5 +1,6 @@
 package org.dew.wcron.api;
 
+import java.util.Date;
 import java.util.Map;
 
 import javax.ejb.Local;
@@ -10,11 +11,11 @@ interface ICronManager
 {
   public Map<String, Object> load();
   
-  public ActivityInfo[] listActivities();
+  public Activity[] listActivities();
   
   public int countActivities();
   
-  public boolean addActivity(ActivityInfo activity);
+  public boolean addActivity(Activity activity);
   
   public boolean removeActivity(String activityName);
   
@@ -26,9 +27,11 @@ interface ICronManager
   
   public boolean cancelAll();
   
-  public JobInfo getJob(long jobId);
+  public Job getJob(long jobId);
   
-  public JobInfo[] listJobs();
+  public boolean notifyExecution(long jobId, Date lastExecution, String lastResult, String lastError, int elapsed);
+  
+  public Job[] listJobs();
   
   public int countJobs();
 }

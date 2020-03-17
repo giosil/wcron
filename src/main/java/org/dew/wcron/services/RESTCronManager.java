@@ -22,10 +22,11 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriInfo;
 
-import org.dew.wcron.api.ActivityInfo;
+import org.dew.wcron.api.Activity;
 import org.dew.wcron.api.ICronManager;
-import org.dew.wcron.api.JobInfo;
+import org.dew.wcron.api.Job;
 import org.dew.wcron.auth.WSecure;
+
 import org.dew.wcron.util.LoggerFactory;
 
 @Path("/manager")
@@ -71,7 +72,7 @@ class RESTCronManager
   @Produces(MediaType.APPLICATION_JSON)
   @WSecure
   public 
-  ActivityInfo[] listActivities()
+  Activity[] listActivities()
   {
     Principal principal = securityContext.getUserPrincipal();
     
@@ -86,7 +87,7 @@ class RESTCronManager
   @Produces(MediaType.APPLICATION_JSON)
   @WSecure
   public 
-  boolean addActivity(ActivityInfo activity) 
+  boolean addActivity(Activity activity) 
   {
     Principal principal = securityContext.getUserPrincipal();
     
@@ -157,7 +158,7 @@ class RESTCronManager
   @Produces(MediaType.APPLICATION_JSON)
   @WSecure
   public 
-  JobInfo getJob(@PathParam("jobId") Long jobId)
+  Job getJob(@PathParam("jobId") Long jobId)
   {
     Principal principal = securityContext.getUserPrincipal();
     
@@ -171,7 +172,7 @@ class RESTCronManager
   @Produces(MediaType.APPLICATION_JSON)
   @WSecure
   public 
-  JobInfo[] listJobs()
+  Job[] listJobs()
   {
     Principal principal = securityContext.getUserPrincipal();
     

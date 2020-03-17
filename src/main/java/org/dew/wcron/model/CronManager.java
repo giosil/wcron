@@ -1,12 +1,14 @@
 package org.dew.wcron.model;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import java.util.concurrent.ConcurrentHashMap;
+
 import java.util.logging.Logger;
 
 import javax.ejb.Local;
@@ -19,18 +21,18 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
-import org.dew.wcron.api.ActivityInfo;
+import org.dew.wcron.api.Activity;
 import org.dew.wcron.api.ICronManager;
 import org.dew.wcron.api.ICronTrigger;
-import org.dew.wcron.api.JobInfo;
+import org.dew.wcron.api.Job;
 
-import org.dew.wcron.persistence.Activity;
-import org.dew.wcron.persistence.Job;
+import org.dew.wcron.persistence.ActivityEntity;
+import org.dew.wcron.persistence.JobEntity;
 
 import org.dew.wcron.util.LoggerFactory;
 
-import static org.dew.wcron.util.DataUtil.toActivityInfo;
-import static org.dew.wcron.util.DataUtil.toJobInfo;
+import static org.dew.wcron.util.DataUtil.toActivity;
+import static org.dew.wcron.util.DataUtil.toJob;
 
 @Stateless
 @Local(ICronManager.class)
@@ -38,8 +40,8 @@ import static org.dew.wcron.util.DataUtil.toJobInfo;
 public 
 class CronManager implements ICronManager 
 {
-  private final static ConcurrentHashMap<String, ActivityInfo> activities = new ConcurrentHashMap<String, ActivityInfo>();
-  private final static ConcurrentHashMap<Long, JobInfo> jobs = new ConcurrentHashMap<Long, JobInfo>();
+  private final static ConcurrentHashMap<String, Activity> activities = new ConcurrentHashMap<String, Activity>();
+  private final static ConcurrentHashMap<Long, Job> jobs = new ConcurrentHashMap<Long, Job>();
   
   protected static Logger logger = LoggerFactory.getLogger(CronManager.class);
   
@@ -60,46 +62,45 @@ class CronManager implements ICronManager
     
     cronTrigger.cancelAll();
     
-    TypedQuery<Job> findJobQuery = em.createNamedQuery("Job.findByActivityName", Job.class);
+    TypedQuery<JobEntity> findJobQuery = em.createNamedQuery("Jobs.findByActivityName", JobEntity.class);
     
-    List<Activity> listActivity = null;
+    List<ActivityEntity> listActivity = null;
     try {
-      logger.fine("CronManager.load() Activity.findAll...");
-      listActivity = em.createNamedQuery("Activity.findAll", Activity.class).getResultList();  
+      logger.fine("CronManager.load() Activities.findAll...");
+      listActivity = em.createNamedQuery("Activities.findAll", ActivityEntity.class).getResultList();
     }
     catch(Exception ex) {
-      logger.fine("CronManager.load() Activity.findAll: " + ex);
+      logger.fine("CronManager.load() Activities.findAll: " + ex);
     }
     
     if(listActivity == null) {
-      listActivity = new ArrayList<Activity>(0);
+      listActivity = new ArrayList<ActivityEntity>(0);
     }
     
-    Iterator<Activity> iterator = listActivity.iterator();
+    Iterator<ActivityEntity> iterator = listActivity.iterator();
     while(iterator.hasNext()) {
-      Activity activity = iterator.next();
+      ActivityEntity activityEntity = iterator.next();
       
-      String name = activity.getName();
+      String name = activityEntity.getName();
       
-      activities.put(name, toActivityInfo(activity));
+      activities.put(name, toActivity(activityEntity));
       
       findJobQuery.setParameter("activityName", name);
       
-      Job job = null;
+      JobEntity jobEntity = null;
       try {
-        logger.fine("CronManager.load() Job.findByActivityName[" + name + "]...");
-        job = findJobQuery.getSingleResult();
+        jobEntity = findJobQuery.getSingleResult();
       }
       catch(Exception ex) {
-        logger.fine("CronManager.load() Job.findByActivityName[" + name + "]: " + ex);
+        logger.fine("CronManager.load() findJobQuery by activityName=" + name + ": " + ex);
       }
-      if(job == null) continue;
+      if(jobEntity == null) continue;
       
-      long jobId = job.getId();
+      long jobId = jobEntity.getId();
       
-      jobs.put(jobId, toJobInfo(activity, job));
+      jobs.put(jobId, toJob(activityEntity, jobEntity));
       
-      boolean scheduled = cronTrigger.schedule(jobId, job.getExpression());
+      boolean scheduled = cronTrigger.schedule(jobId, jobEntity.getExpression());
       
       if(!scheduled) jobs.remove(jobId);
     }
@@ -112,8 +113,8 @@ class CronManager implements ICronManager
   }
   
   @Override
-  public ActivityInfo[] listActivities() {
-    return activities.values().stream().sorted().toArray(ActivityInfo[]::new);
+  public Activity[] listActivities() {
+    return activities.values().stream().sorted().toArray(Activity[]::new);
   }
   
   @Override
@@ -122,7 +123,7 @@ class CronManager implements ICronManager
   }
   
   @Override
-  public boolean addActivity(ActivityInfo activity) {
+  public boolean addActivity(Activity activity) {
     if(activity == null) {
       return false;
     }
@@ -137,11 +138,37 @@ class CronManager implements ICronManager
       return false;
     }
     
-    em.persist(new Activity(activity));
+    boolean exists = false;
+    try {
+      ActivityEntity activityEntity = em.find(ActivityEntity.class, name);
+      exists = activityEntity != null;
+      if(exists) {
+        activity.setCreatedAt(activityEntity.getInsDate());
+      }
+    }
+    catch(Exception ex) {
+      logger.fine("addActivity(" + activity + ") exists=" + exists + " em.find: " + ex);
+    }
     
-    activities.put(name, activity);
+    boolean result = false;
+    try {
+      if(exists) {
+        em.merge(new ActivityEntity(activity, new Date()));
+      }
+      else {
+        em.persist(new ActivityEntity(activity));
+      }
+      result = true;
+    }
+    catch(Exception ex) {
+      logger.fine("addActivity(" + activity + ") failed: " + ex);
+    }
     
-    return true;
+    if(result) {
+      activities.put(name, activity);
+    }
+    
+    return result;
   }
   
   @Override
@@ -150,11 +177,21 @@ class CronManager implements ICronManager
       return false;
     }
     
-    em.remove(new Activity(activityName));
+    boolean result = false;
+    try {
+      ActivityEntity activityEntity = em.find(ActivityEntity.class, activityName);
+      
+      em.remove(activityEntity);
+      
+      result = true;
+    }
+    catch(Exception ex) {
+      logger.severe("Exception in removeActivity(" + activityName + "): " + ex);
+    }
     
     activities.remove(activityName);
     
-    return true;
+    return result;
   }
   
   @Override
@@ -172,11 +209,11 @@ class CronManager implements ICronManager
     }
     expression = expression.replace('_', ' ');
     
-    ActivityInfo activity = activities.get(activityName);
+    Activity activity = activities.get(activityName);
     
     if(activity == null) return 0;
     
-    Job job = new Job(activity, expression, parameters);
+    JobEntity job = new JobEntity(activity, expression, parameters);
     
     em.persist(job);
     
@@ -185,7 +222,7 @@ class CronManager implements ICronManager
     
     long jobId = job.getId();
     
-    jobs.put(jobId, new JobInfo(jobId, activity, expression, parameters));
+    jobs.put(jobId, new Job(jobId, activity, expression, parameters));
     
     boolean scheduled = cronTrigger.schedule(jobId, expression);
     
@@ -204,7 +241,14 @@ class CronManager implements ICronManager
     if(cancelled) {
       jobs.remove(jobId);
       
-      em.remove(new Job(jobId));
+      try {
+        JobEntity jobEntity = em.find(JobEntity.class, jobId);
+        
+        if(jobEntity != null) em.remove(jobEntity);
+      }
+      catch(Exception ex) {
+        logger.severe("Exception in removeJob(" + jobId + "): " + ex);
+      }
     }
     
     return cancelled;
@@ -216,13 +260,47 @@ class CronManager implements ICronManager
   }
   
   @Override
-  public JobInfo getJob(long jobId) {
+  public Job getJob(long jobId) {
     return jobs.get(jobId);
   }
   
   @Override
-  public JobInfo[] listJobs() {
-    return jobs.values().stream().sorted().toArray(JobInfo[]::new);
+  public boolean notifyExecution(long jobId, Date lastExecution, String lastResult, String lastError, int elapsed) {
+    boolean result = false;
+    
+    JobEntity jobEntity = null;
+    try {
+      jobEntity = em.find(JobEntity.class, jobId);
+    }
+    catch(Exception ex) {
+      logger.severe("Exception in notifyExecution(" + jobId + "): " + ex);
+    }
+    
+    if(jobEntity == null) return result;
+    
+    if(lastResult != null && lastResult.length() > 4000) {
+      lastResult = lastResult.substring(0, 4000);
+    }
+    if(lastError != null && lastError.length() > 255) {
+      lastResult = lastError.substring(0, 255);
+    }
+    if(lastExecution == null) {
+      lastExecution = new Date();
+    }
+    
+    jobEntity.setLastExecution(lastExecution);
+    jobEntity.setLastResult(lastResult);
+    jobEntity.setLastError(lastError);
+    jobEntity.setElapsed(elapsed);
+    jobEntity.setUpdDate(new Date());
+    
+    return result;
+  }
+  
+  
+  @Override
+  public Job[] listJobs() {
+    return jobs.values().stream().sorted().toArray(Job[]::new);
   }
   
   @Override

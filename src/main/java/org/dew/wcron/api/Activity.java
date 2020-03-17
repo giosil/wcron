@@ -6,16 +6,16 @@ import java.util.Date;
 import java.util.Map;
 
 public 
-class ActivityInfo implements Serializable, Comparable<ActivityInfo>
+class Activity implements Serializable, Comparable<Activity>
 {
-  private static final long serialVersionUID = 7270436398766545637L;
+  private static final long serialVersionUID = -2591580725283002720L;
   
   private String name;
   private String uri;
   private Map<String,Object> parameters;
   private Date createdAt;
   
-  public ActivityInfo()
+  public Activity()
   {
   }
   
@@ -52,19 +52,19 @@ class ActivityInfo implements Serializable, Comparable<ActivityInfo>
   }
 
   @Override
-  public int compareTo(ActivityInfo object) {
-    if(object == null) return -1;
+  public int compareTo(Activity object) {
+    if(object == null) return 1;
     String sName = object.getName();
     if(name == null) {
-      return sName == null ? 0 : 1;
+      return sName == null ? 0 : -1;
     }
     return name.compareTo(sName);
   }
   
   @Override
   public boolean equals(Object object) {
-    if(object instanceof ActivityInfo) {
-      String sName = ((ActivityInfo) object).getName();
+    if(object instanceof Activity) {
+      String sName = ((Activity) object).getName();
       if(sName == null && name == null) return true;
       return sName != null && sName.equals(name);
     }

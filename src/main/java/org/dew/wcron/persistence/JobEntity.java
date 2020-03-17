@@ -14,20 +14,20 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import org.dew.wcron.api.ActivityInfo;
-import org.dew.wcron.api.JobInfo;
+import org.dew.wcron.api.Activity;
+import org.dew.wcron.api.Job;
 
 import org.dew.wcron.util.JSONUtils;
 
-@Entity
+@Entity(name="Job")
 @Table(name="JOBS")
 @NamedQueries({
-  @NamedQuery(name="Job.findAll", query="SELECT j FROM Job j"),
-  @NamedQuery(name="Job.findById", query="SELECT j FROM Job j WHERE j.id = :id"),
-  @NamedQuery(name="Job.findByActivityName", query="SELECT j FROM Job j WHERE j.activityName = :activityName")
+  @NamedQuery(name="Jobs.findAll", query="SELECT j FROM Job j"),
+  @NamedQuery(name="Jobs.findById", query="SELECT j FROM Job j WHERE j.id = :id"),
+  @NamedQuery(name="Jobs.findByActivityName", query="SELECT j FROM Job j WHERE j.activityName = :activityName")
 })
 public 
-class Job 
+class JobEntity 
 {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,13 +36,17 @@ class Job
   @Column(name="ACTIVITY", nullable = false, length=50)
   private String activityName;
   
-  @Column(name="PARAMS", nullable = true, length=255)
+  @Column(name="PARAMS", nullable = true, length=4000)
   private String parameters;
   
   @Column(nullable = false, length=50)
   private String expression;
   
-  @Column(name="LAST_RESULT", nullable = true, length=255)
+  @Temporal(TemporalType.TIMESTAMP)
+  @Column(name="LAST_EXECUTION", nullable = true)
+  private Date lastExecution;
+  
+  @Column(name="LAST_RESULT", nullable = true, length=4000)
   private String lastResult;
   
   @Column(name="LAST_ERROR", nullable = true, length=255)
@@ -59,43 +63,43 @@ class Job
   @Column(name="UPD_DATE", nullable = true)
   private Date updDate;
   
-  public Job()
+  public JobEntity()
   {
   }
   
-  public Job(long id)
+  public JobEntity(long id)
   {
     this.id = id;
   }
   
-  public Job(JobInfo jobInfo)
+  public JobEntity(Job job)
   {
-    this.id = jobInfo.getId();
-    ActivityInfo activityInfo = jobInfo.getActivity();
+    this.id = job.getId();
+    Activity activityInfo = job.getActivity();
     if(activityInfo != null) {
       this.activityName = activityInfo.getName();
     }
-    this.parameters = JSONUtils.stringify(jobInfo.getParameters());
-    if(this.parameters != null && this.parameters.length() > 255) {
-      this.parameters = this.parameters.substring(0, 255);
+    this.parameters = JSONUtils.stringify(job.getParameters());
+    if(this.parameters != null && this.parameters.length() > 4000) {
+      this.parameters = this.parameters.substring(0, 4000);
     }
-    this.expression = jobInfo.getExpression();
-    this.lastResult = jobInfo.getLastResult();
-    if(this.lastResult != null && this.lastResult.length() > 255) {
-      this.lastResult = this.lastResult.substring(0, 255);
+    this.expression = job.getExpression();
+    this.lastResult = job.getLastResult();
+    if(this.lastResult != null && this.lastResult.length() > 4000) {
+      this.lastResult = this.lastResult.substring(0, 4000);
     }
-    this.lastError = jobInfo.getLastError();
+    this.lastError = job.getLastError();
     if(this.lastError != null && this.lastError.length() > 255) {
       this.lastError = this.lastError.substring(0, 255);
     }
-    this.elapsed = jobInfo.getElapsed();
-    this.insDate = jobInfo.getCreatedAt();
+    this.elapsed = job.getElapsed();
+    this.insDate = job.getCreatedAt();
     if(this.insDate == null) {
       this.insDate = new Date();
     }
   }
   
-  public Job(ActivityInfo activityInfo, String expression, Map<String,Object> parameters)
+  public JobEntity(Activity activityInfo, String expression, Map<String,Object> parameters)
   {
     if(activityInfo != null) {
       this.activityName = activityInfo.getName();
@@ -142,6 +146,14 @@ class Job
     this.expression = expression;
   }
 
+  public Date getLastExecution() {
+    return lastExecution;
+  }
+
+  public void setLastExecution(Date lastExecution) {
+    this.lastExecution = lastExecution;
+  }
+
   public String getLastResult() {
     return lastResult;
   }
@@ -184,8 +196,8 @@ class Job
 
   @Override
   public boolean equals(Object object) {
-    if(object instanceof Job) {
-      Long oId = ((Job) object).getId();
+    if(object instanceof JobEntity) {
+      Long oId = ((JobEntity) object).getId();
       if(oId == null && id == null) return true;
       return oId != null && oId.equals(id);
     }

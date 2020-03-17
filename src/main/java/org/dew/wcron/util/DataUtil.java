@@ -1,43 +1,43 @@
 package org.dew.wcron.util;
 
-import org.dew.wcron.api.ActivityInfo;
-import org.dew.wcron.api.JobInfo;
-import org.dew.wcron.persistence.Activity;
-import org.dew.wcron.persistence.Job;
+import org.dew.wcron.api.Activity;
+import org.dew.wcron.api.Job;
+import org.dew.wcron.persistence.ActivityEntity;
+import org.dew.wcron.persistence.JobEntity;
 
 public 
 class DataUtil 
 {
   public static 
-  ActivityInfo toActivityInfo(Activity activity) 
+  Activity toActivity(ActivityEntity activityEntity) 
   {
-    if(activity == null) return null;
+    if(activityEntity == null) return null;
     
-    ActivityInfo result = new ActivityInfo();
-    result.setName(activity.getName());
-    result.setUri(activity.getUri());
-    result.setParameters(JSONUtils.parseObject(activity.getParameters(), true));
-    result.setCreatedAt(activity.getInsDate());
+    Activity result = new Activity();
+    result.setName(activityEntity.getName());
+    result.setUri(activityEntity.getUri());
+    result.setParameters(JSONUtils.parseObject(activityEntity.getParameters(), true));
+    result.setCreatedAt(activityEntity.getInsDate());
     
     return result;
   }
   
   public static 
-  JobInfo toJobInfo(Activity activity, Job job) 
+  Job toJob(ActivityEntity activityEntity, JobEntity jobEntity) 
   {
-    if(activity == null || job == null) return null;
+    if(activityEntity == null || jobEntity == null) return null;
     
-    ActivityInfo activityInfo = toActivityInfo(activity);
+    Activity activity = toActivity(activityEntity);
     
-    JobInfo result = new JobInfo();
-    result.setId(job.getId());
-    result.setActivity(activityInfo);
-    result.setExpression(job.getExpression());
-    result.setParameters(JSONUtils.parseObject(job.getParameters(), false));
-    result.setLastResult(job.getLastResult());
-    result.setLastError(job.getLastError());
-    result.setElapsed(job.getElapsed());
-    result.setCreatedAt(job.getInsDate());
+    Job result = new Job();
+    result.setId(jobEntity.getId());
+    result.setActivity(activity);
+    result.setExpression(jobEntity.getExpression());
+    result.setParameters(JSONUtils.parseObject(jobEntity.getParameters(), false));
+    result.setLastResult(jobEntity.getLastResult());
+    result.setLastError(jobEntity.getLastError());
+    result.setElapsed(jobEntity.getElapsed());
+    result.setCreatedAt(jobEntity.getInsDate());
     
     return result;
   }

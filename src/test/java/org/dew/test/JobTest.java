@@ -1,15 +1,10 @@
-package org.dew.wcron.api;
+package org.dew.test;
 
 import java.util.Map;
 
 import java.util.concurrent.Callable;
 
-import java.util.logging.Logger;
-
-import org.dew.wcron.util.LoggerFactory;
-
-public class JobMock implements Callable<Long> {
-  protected static Logger logger = LoggerFactory.getLogger(JobMock.class);
+public class JobTest implements Callable<Long> {
   
   protected Map<String,Object> parameters = null;
   protected long id;
@@ -25,7 +20,9 @@ public class JobMock implements Callable<Long> {
   @Override
   public Long call() throws Exception {
     long result = System.currentTimeMillis();
-    logger.fine("[" + id + "] JobMock.call() <parameters=" + parameters + "> -> " + result);
+    
+    System.out.println("[" + id + "] JobMock.call() <parameters=" + parameters + "> -> " + result);
+    
     return result;
   }
 }
