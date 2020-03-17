@@ -3,8 +3,8 @@
 A job scheduler configurable through RESTful web services.
 The scheduler contains the following entities:
 
-* Activity: identified by name specifies the class that will perform the task and the default execution parameters;
-* Job: specifies acitivity schedulation with the optional execution parameters.
+* **Activity**: identified by *name* specifies the class that will perform the task and the default execution parameters;
+* **Job**: specifies acitivity schedulation with the optional execution parameters.
 
 
 The class is identified by Activity.uri as follows:
@@ -20,86 +20,87 @@ The class is identified by Activity.uri as follows:
 
 ## API 
 
-### Info
+#### Info
 
-Request:
-GET `http://localhost:8080/wcron/scheduler/manager/info`
+Request:<br/>
+**GET** `http://localhost:8080/wcron/scheduler/manager/info`
 
-Response:
-HTTP 200
+Response:<br/>
+HTTP **200**<br/>
 `{"name":"wcron","version":"1.0.5","activities":1,"jobs":1}`
 
-### listActivities
+#### listActivities
 
-GET `http://localhost:8080/wcron/scheduler/manager/listActivities`
+Request:<br/>
+**GET** `http://localhost:8080/wcron/scheduler/manager/listActivities`
 
-Response:
-HTTP 200
+Response:<br/>
+HTTP **200**<br/>
 `[{"name":"demo","uri":"mock","parameters":{"greeting":"hello"},"createdAt":1584313200000}]`
 
-### addActivity
+#### addActivity
 
-Request:
-POST `http://localhost:8080/wcron/scheduler/manager/addActivity`
+Request:<br/>
+**POST** `http://localhost:8080/wcron/scheduler/manager/addActivity`<br/>
 `{"name":"test", "uri":"test.JobTest", "parameters":{"greeting":"hello"}}`
 
-Response:
-HTTP 200
+Response:<br/>
+HTTP **200**<br/>
 `true` | `false`
 
-### removeActivity (by activityName)
+#### removeActivity (by activityName)
 
-Request:
-GET `http://localhost:8080/wcron/scheduler/manager/removeActivity/{activityName}`
+Request:<br/>
+**GET** `http://localhost:8080/wcron/scheduler/manager/removeActivity/{activityName}`
 
-Response:
-HTTP 200
+Response:<br/>
+HTTP **200**<br/>
 `true` | `false`
 
-### listJobs
+#### listJobs
 
-Request:
-GET `http://localhost:8080/wcron/scheduler/manager/listJobs`
+Request:<br/>
+**GET** `http://localhost:8080/wcron/scheduler/manager/listJobs`
 
-Response:
-HTTP 200
+Response:<br/>
+HTTP **200**<br/>
 `[{"id":1,"activity":{"name":"demo","uri":"mock","parameters":{"greeting":"hello"},"createdAt":1584313200000},"expression":"1000 5000","parameters":null,"running":false,"requestInterrupt":false,"lastResult":"1584455410924","lastError":"","createdAt":1584313200000,"elapsed":1}]`
 
-### schedule without execution parameters
+#### schedule (without execution parameters)
 
-Request:
-GET `http://localhost:8080/wcron/scheduler/manager/schedule/{activityName}/{expression}`
+Request:<br/>
+**GET** `http://localhost:8080/wcron/scheduler/manager/schedule/{activityName}/{expression}`
 
-Response:
-HTTP 200
+Response:<br/>
+HTTP **200**<br/>
 `jobId` (number)
 
-### schedule with execution parameters
+#### schedule (with execution parameters)
 
-Request:
-POST `http://localhost:8080/wcron/scheduler/manager/schedule/{activityName}/{expression}`
+Request:<br/>
+**POST** `http://localhost:8080/wcron/scheduler/manager/schedule/{activityName}/{expression}`<br/>
 `{"greeting": "hello"}`
 
-Response:
-HTTP 200
-`jobId` (number)
+Response:<br/>
+HTTP **200**<br/>
+`jobId` *(number)*
 
-### removeJob
+#### removeJob
 
-Request:
-GET `http://localhost:8080/wcron/scheduler/manager/removeJob/{jobId}`
+Request:<br/>
+**GET** `http://localhost:8080/wcron/scheduler/manager/removeJob/{jobId}`
 
-Response:
-HTTP 200
+Response:<br/>
+HTTP **200**<br/>
 `true` | `false`
 
-### getJob
+#### getJob
 
-Request:
-GET `http://localhost:8080/wcron/scheduler/manager/getJob/{jobId}`
+Request:<br/>
+**GET** `http://localhost:8080/wcron/scheduler/manager/getJob/{jobId}`
 
-Response:
-HTTP 200
+Response:<br/>
+HTTP **200**<br/>
 `{"id":1,"activity":{"name":"demo","uri":"mock","parameters":{"greeting":"hello"},"createdAt":1584313200000},"expression":"1000 5000","parameters":null,"running":false,"requestInterrupt":false,"lastResult":"1584455850925","lastError":"","createdAt":1584313200000,"elapsed":1}`
 
 ## Contributors
