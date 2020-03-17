@@ -20,7 +20,7 @@ The class is identified by Activity.uri as follows:
 
 ## API 
 
-#### Info
+### Info
 
 Request:<br/>
 **GET** `http://localhost:8080/wcron/scheduler/manager/info`
@@ -29,7 +29,7 @@ Response:<br/>
 HTTP **200**<br/>
 `{"name":"wcron","version":"1.0.5","activities":1,"jobs":1}`
 
-#### listActivities
+### listActivities
 
 Request:<br/>
 **GET** `http://localhost:8080/wcron/scheduler/manager/listActivities`
@@ -38,7 +38,7 @@ Response:<br/>
 HTTP **200**<br/>
 `[{"name":"demo","uri":"mock","parameters":{"greeting":"hello"},"createdAt":1584313200000}]`
 
-#### addActivity
+### addActivity
 
 Request:<br/>
 **POST** `http://localhost:8080/wcron/scheduler/manager/addActivity`<br/>
@@ -48,7 +48,7 @@ Response:<br/>
 HTTP **200**<br/>
 `true` | `false`
 
-#### removeActivity (by activityName)
+### removeActivity (by activityName)
 
 Request:<br/>
 **GET** `http://localhost:8080/wcron/scheduler/manager/removeActivity/{activityName}`
@@ -57,7 +57,7 @@ Response:<br/>
 HTTP **200**<br/>
 `true` | `false`
 
-#### listJobs
+### listJobs
 
 Request:<br/>
 **GET** `http://localhost:8080/wcron/scheduler/manager/listJobs`
@@ -66,7 +66,7 @@ Response:<br/>
 HTTP **200**<br/>
 `[{"id":1,"activity":{"name":"demo","uri":"mock","parameters":{"greeting":"hello"},"createdAt":1584313200000},"expression":"1000 5000","parameters":null,"running":false,"requestInterrupt":false,"lastResult":"1584455410924","lastError":"","createdAt":1584313200000,"elapsed":1}]`
 
-#### schedule (without execution parameters)
+### schedule (without execution parameters)
 
 Request:<br/>
 **GET** `http://localhost:8080/wcron/scheduler/manager/schedule/{activityName}/{expression}`
@@ -75,7 +75,7 @@ Response:<br/>
 HTTP **200**<br/>
 `jobId` (number)
 
-#### schedule (with execution parameters)
+### schedule (with execution parameters)
 
 Request:<br/>
 **POST** `http://localhost:8080/wcron/scheduler/manager/schedule/{activityName}/{expression}`<br/>
@@ -85,7 +85,7 @@ Response:<br/>
 HTTP **200**<br/>
 `jobId` *(number)*
 
-#### removeJob
+### removeJob
 
 Request:<br/>
 **GET** `http://localhost:8080/wcron/scheduler/manager/removeJob/{jobId}`
@@ -94,7 +94,7 @@ Response:<br/>
 HTTP **200**<br/>
 `true` | `false`
 
-#### getJob
+### getJob
 
 Request:<br/>
 **GET** `http://localhost:8080/wcron/scheduler/manager/getJob/{jobId}`
