@@ -9,9 +9,9 @@ The scheduler contains the following entities:
 
 The class is identified by Activity.uri as follows:
 
-* mock: no-action job;
-* package.ClassName: class in {user.home}/wcron/classes
-* java:global/[application]/[module]/EJBName
+* **mock**: no-action job;
+* **package.ClassName**: class in {user.home}/wcron/classes;
+* **java:global/[application]/[module]/EJBName**: JNDI lookup name of EJB.
 
 ## Build
 
