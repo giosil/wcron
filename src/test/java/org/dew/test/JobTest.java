@@ -4,8 +4,9 @@ import java.util.Map;
 
 import java.util.concurrent.Callable;
 
-public class JobTest implements Callable<Long> {
-  
+public 
+class JobTest implements Callable<Long> 
+{
   protected Map<String,Object> parameters = null;
   protected long id;
   

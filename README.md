@@ -17,8 +17,19 @@ The class is identified by Activity.uri as follows:
 
 - `git clone https://github.com/giosil/wcron.git`
 - `mvn clean install`
+- `docker build -t wcron .` - this will create a Docker image named wcron
+- `docker run --rm -it -p 8080:8080 wcron` - To run image named wcron
+
+### Optimize Virtual hard disks on Windows 10
+
+- Shutdown Docker Desktop
+- `Optimize-VHD -Path "C:\Users\Public\Documents\Hyper-V\Virtual hard disks\DockerDesktop.vhdx" -Mode Full`
+- Start Docker Desktop
 
 ## API 
+
+Access to RESTful services is through HTTP basic authentication.<br/>
+For test use dev:dev.
 
 ### Info
 

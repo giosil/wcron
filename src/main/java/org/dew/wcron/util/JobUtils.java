@@ -57,7 +57,7 @@ class JobUtils
     
     Activity activity = job.getActivity();
     if(activity == null) {
-      throw new Exception("Invalid job: no activity.");
+      throw new Exception("No activity in job");
     }
     
     // Execution parameters
@@ -76,8 +76,19 @@ class JobUtils
     
     String uri = activity.getUri();
     
+    return createJobInstance(uri, job.getId(), parameters);
+  }
+  
+  public static
+  Callable<?> createJobInstance(String uri, long jobId, Map<String,Object> parameters)
+    throws Exception
+  {
     if(uri == null || uri.length() == 0) {
       throw new Exception("Invali uri");
+    }
+    
+    if(parameters == null) {
+      parameters = new HashMap<String, Object>();
     }
     
     Callable<?> result = null;
@@ -125,7 +136,7 @@ class JobUtils
         if(types == null || types.length != 1) {
           continue;
         }
-        Object param = getParameter(job.getId(), types[0].getName());
+        Object param = getParameter(jobId, types[0].getName());
         if(param != null) {
           method.invoke(result, new Object[] { param });
         }

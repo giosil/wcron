@@ -14,8 +14,9 @@ import org.dew.wcron.util.LoggerFactory;
 
 @Startup
 @Singleton
-public class CronStartup {
-  
+public 
+class CronStartup 
+{
   protected static Logger logger = LoggerFactory.getLogger(CronStartup.class);
   
   @EJB

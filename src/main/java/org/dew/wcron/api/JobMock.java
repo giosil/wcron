@@ -8,7 +8,9 @@ import java.util.logging.Logger;
 
 import org.dew.wcron.util.LoggerFactory;
 
-public class JobMock implements Callable<Long> {
+public 
+class JobMock implements Callable<Long> 
+{
   protected static Logger logger = LoggerFactory.getLogger(JobMock.class);
   
   protected Map<String,Object> parameters = null;
