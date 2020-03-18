@@ -115,7 +115,7 @@ class Job implements Serializable, Comparable<Job>
 
   @Override
   public int compareTo(Job object) {
-    if(object == null) return -1;
+    if(object == null) return 1;
     long objId = object.getId();
     if(id == objId) return 0;
     return id > objId ? 1 : -1;

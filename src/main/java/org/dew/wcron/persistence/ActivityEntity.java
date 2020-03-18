@@ -18,21 +18,21 @@ public
 class ActivityEntity
 {
   @Id
-  @Column(nullable = false, length=50)
+  @Column(nullable = false, length = 50)
   private String name;
   
-  @Column(nullable = false, length=100)
+  @Column(nullable = false, length = 100)
   private String uri;
   
-  @Column(name="PARAMS", nullable = true, length=4000)
+  @Column(name = "PARAMS", nullable = true, length = 4000)
   private String parameters;
   
   @Temporal(TemporalType.TIMESTAMP)
-  @Column(name="INS_DATE", nullable = false)
+  @Column(name = "INS_DATE", nullable = false)
   private Date insDate;
   
   @Temporal(TemporalType.TIMESTAMP)
-  @Column(name="UPD_DATE", nullable = true)
+  @Column(name = "UPD_DATE", nullable = true)
   private Date updDate;
   
   public ActivityEntity()

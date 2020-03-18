@@ -564,7 +564,7 @@ class JSONUtils
     return listResult;
   }
   
-  private static
+  public static
   String dateTimeToString(long millis)
   {
     Calendar cal = Calendar.getInstance();
@@ -607,32 +607,7 @@ class JSONUtils
     return sYear + "-" + sMonth + "-" + sDay + "T" + sHour + ":" + sMin + ":" + sSec + "." + sMill + "Z";
   }
   
-  private static
-  boolean isDateTime(String s)
-  {
-    boolean boDateTime = false;
-    if(s.length() == acDateTime.length) {
-      boDateTime = true;
-      for(int i = 0; i < acDateTime.length; i++) {
-        char cs = s.charAt(i);
-        char cp = acDateTime[i];
-        if(cs == cp) continue;
-        if(cp == 48) {
-          if(cs < 48 || cs > 57) {
-            boDateTime = false;
-            break;
-          }
-        }
-        else {
-          boDateTime = false;
-          break;
-        }
-      }
-    }
-    return boDateTime;
-  }
-  
-  private static
+  public static
   Object stringToDateTime(String s)
   {
     if(s == null || s.length() != acDateTime.length) {
@@ -683,6 +658,31 @@ class JSONUtils
     Calendar r = new GregorianCalendar(c.get(Calendar.YEAR),c.get(Calendar.MONTH),c.get(Calendar.DATE),c.get(Calendar.HOUR_OF_DAY),c.get(Calendar.MINUTE),c.get(Calendar.SECOND));
     r.set(Calendar.MILLISECOND,c.get(Calendar.MILLISECOND));
     return r.getTime();
+  }
+  
+  private static
+  boolean isDateTime(String s)
+  {
+    boolean boDateTime = false;
+    if(s.length() == acDateTime.length) {
+      boDateTime = true;
+      for(int i = 0; i < acDateTime.length; i++) {
+        char cs = s.charAt(i);
+        char cp = acDateTime[i];
+        if(cs == cp) continue;
+        if(cp == 48) {
+          if(cs < 48 || cs > 57) {
+            boDateTime = false;
+            break;
+          }
+        }
+        else {
+          boDateTime = false;
+          break;
+        }
+      }
+    }
+    return boDateTime;
   }
   
   private static 

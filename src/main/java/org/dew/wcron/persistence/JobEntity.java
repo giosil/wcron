@@ -5,9 +5,12 @@ import java.util.Map;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -15,7 +18,6 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import org.dew.wcron.api.Activity;
-import org.dew.wcron.api.Job;
 
 import org.dew.wcron.util.JSONUtils;
 
@@ -24,7 +26,7 @@ import org.dew.wcron.util.JSONUtils;
 @NamedQueries({
   @NamedQuery(name="Jobs.findAll", query="SELECT j FROM Job j"),
   @NamedQuery(name="Jobs.findById", query="SELECT j FROM Job j WHERE j.id = :id"),
-  @NamedQuery(name="Jobs.findByActivityName", query="SELECT j FROM Job j WHERE j.activityName = :activityName")
+  @NamedQuery(name="Jobs.findByActivityName", query="SELECT j FROM Job j WHERE j.activity.name = :activityName")
 })
 public 
 class JobEntity 
@@ -33,34 +35,35 @@ class JobEntity
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
   
-  @Column(name="ACTIVITY", nullable = false, length=50)
-  private String activityName;
+  @ManyToOne(fetch = FetchType.LAZY, optional = false)
+  @JoinColumn(name = "ACTIVITY")
+  private ActivityEntity activity;
   
-  @Column(name="PARAMS", nullable = true, length=4000)
+  @Column(name = "PARAMS", nullable = true, length = 4000)
   private String parameters;
   
-  @Column(nullable = false, length=50)
+  @Column(nullable = false, length = 50)
   private String expression;
   
   @Temporal(TemporalType.TIMESTAMP)
-  @Column(name="LAST_EXECUTION", nullable = true)
+  @Column(name = "LAST_EXECUTION", nullable = true)
   private Date lastExecution;
   
-  @Column(name="LAST_RESULT", nullable = true, length=4000)
+  @Column(name = "LAST_RESULT", nullable = true, length = 4000)
   private String lastResult;
   
-  @Column(name="LAST_ERROR", nullable = true, length=255)
+  @Column(name = "LAST_ERROR", nullable = true, length = 255)
   private String lastError;
   
   @Column(nullable = false)
   private int elapsed;
   
   @Temporal(TemporalType.TIMESTAMP)
-  @Column(name="INS_DATE", nullable = false)
+  @Column(name = "INS_DATE", nullable = false)
   private Date insDate;
   
   @Temporal(TemporalType.TIMESTAMP)
-  @Column(name="UPD_DATE", nullable = true)
+  @Column(name = "UPD_DATE", nullable = true)
   private Date updDate;
   
   public JobEntity()
@@ -72,37 +75,10 @@ class JobEntity
     this.id = id;
   }
   
-  public JobEntity(Job job)
+  public JobEntity(Activity activity, String expression, Map<String,Object> parameters)
   {
-    this.id = job.getId();
-    Activity activityInfo = job.getActivity();
-    if(activityInfo != null) {
-      this.activityName = activityInfo.getName();
-    }
-    this.parameters = JSONUtils.stringify(job.getParameters());
-    if(this.parameters != null && this.parameters.length() > 4000) {
-      this.parameters = this.parameters.substring(0, 4000);
-    }
-    this.expression = job.getExpression();
-    this.lastResult = job.getLastResult();
-    if(this.lastResult != null && this.lastResult.length() > 4000) {
-      this.lastResult = this.lastResult.substring(0, 4000);
-    }
-    this.lastError = job.getLastError();
-    if(this.lastError != null && this.lastError.length() > 255) {
-      this.lastError = this.lastError.substring(0, 255);
-    }
-    this.elapsed = job.getElapsed();
-    this.insDate = job.getCreatedAt();
-    if(this.insDate == null) {
-      this.insDate = new Date();
-    }
-  }
-  
-  public JobEntity(Activity activityInfo, String expression, Map<String,Object> parameters)
-  {
-    if(activityInfo != null) {
-      this.activityName = activityInfo.getName();
+    if(activity != null) {
+      this.activity = new ActivityEntity(activity);
     }
     if(parameters != null) {
       this.parameters = JSONUtils.stringify(parameters);
@@ -122,12 +98,12 @@ class JobEntity
     this.id = id;
   }
 
-  public String getActivityName() {
-    return activityName;
+  public ActivityEntity getActivity() {
+    return activity;
   }
 
-  public void setActivityName(String activityName) {
-    this.activityName = activityName;
+  public void setActivity(ActivityEntity activity) {
+    this.activity = activity;
   }
 
   public String getParameters() {
@@ -212,6 +188,10 @@ class JobEntity
   
   @Override
   public String toString() {
+    String activityName = null;
+    if(activity != null) {
+      activityName = activity.getName();
+    }
     return activityName + "#" + id;
   }
 }
