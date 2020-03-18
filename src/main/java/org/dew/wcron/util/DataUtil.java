@@ -2,8 +2,8 @@ package org.dew.wcron.util;
 
 import org.dew.wcron.api.Activity;
 import org.dew.wcron.api.Job;
-import org.dew.wcron.persistence.ActivityEntity;
-import org.dew.wcron.persistence.JobEntity;
+import org.dew.wcron.jpa.ActivityEntity;
+import org.dew.wcron.jpa.JobEntity;
 
 public 
 class DataUtil 

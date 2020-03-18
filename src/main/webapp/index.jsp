@@ -1,4 +1,4 @@
-<%@page import="org.dew.wcron.services.RESTApp"%>
+<%@page import="org.dew.wcron.rest.RESTApp"%>
 <!DOCTYPE html>
 <html>
 	<head>

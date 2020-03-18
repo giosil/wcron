@@ -1,4 +1,4 @@
-package org.dew.wcron.persistence;
+package org.dew.wcron.jpa;
 
 import java.util.Date;
 import java.util.Map;
