@@ -4,6 +4,7 @@ import java.io.File;
 
 import java.lang.reflect.Method;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 
 import java.net.URL;
@@ -35,10 +36,7 @@ class JobUtils
   {
     if(_classLoader != null) return _classLoader;
     
-    String classesFolderPath = System.getProperty("user.home") + File.separator + "wcron" + File.separator + "classes";
-    
-    File classesFolder = new File(classesFolderPath);
-    if(!classesFolder.exists()) classesFolder.mkdirs();
+    File classesFolder = WCronConfig.getClassFolder();
     
     URL[] urls = new URL[] { classesFolder.toURI().toURL() };
     
@@ -178,6 +176,9 @@ class JobUtils
     }
     else if(typeName.equals("java.math.BigInteger")) {
       return new BigInteger(String.valueOf(value));
+    }
+    else if(typeName.equals("java.math.BigDecimal")) {
+      return new BigDecimal(String.valueOf(value));
     }
     
     return null;
