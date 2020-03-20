@@ -1,6 +1,7 @@
 package org.dew.wcron.auth;
 
 import java.util.Base64;
+
 import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletRequest;
@@ -22,20 +23,25 @@ class WAuthorization
   WPrincipal checkAuthorization(HttpServletRequest request, HttpServletResponse response)
   {
     if(request == null) return null;
+    WPrincipal result = null;
     try {
       String authorization = request.getHeader("Authorization");
       if(authorization == null || authorization.length() == 0) {
-        response.sendError(401);
+        response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
         response.setHeader("WWW-Authenticate", AUTHENTICATE);
         return null;
       }
       
-      return checkAuthorization(authorization);
+      result = checkAuthorization(authorization);
+      
+      if(result == null) {
+        response.sendError(HttpServletResponse.SC_FORBIDDEN);
+      }
     }
     catch(Exception ex) {
       logger.severe("Exception in WAuthorization.checkAuthorization(request): " + ex);
     }
-    return null;
+    return result;
   }
   
   public static

@@ -9,7 +9,7 @@ import java.math.BigInteger;
 
 import java.net.URL;
 import java.net.URLClassLoader;
-
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
@@ -151,6 +151,63 @@ class JobUtils
       }
     }
     
+    return result;
+  }
+  
+  public static
+  boolean cleanOutputFolder()
+  {
+    Calendar cal = Calendar.getInstance();
+    cal.set(Calendar.HOUR_OF_DAY, 0);
+    cal.set(Calendar.MINUTE, 0);
+    cal.set(Calendar.SECOND, 0);
+    cal.set(Calendar.MILLISECOND, 0);
+    
+    cal.add(Calendar.DATE, -1);
+    
+    File outputFolder = WCronConfig.getOutputFolder();
+    
+    return deleteFilesRecursively(outputFolder, cal.getTimeInMillis());
+  }
+  
+  protected static
+  boolean deleteFilesRecursively(File file, long olderThan)
+  {
+    if(file == null) return false;
+    
+    if(file.isFile()) {
+      long lastModified = file.lastModified();
+      if(lastModified > 0 && lastModified < olderThan) {
+        return false;
+      }
+      return file.delete();
+    }
+    
+    File files[] = file.listFiles();
+    if(files == null) {
+      return file.delete();
+    }
+    
+    boolean result = true;
+    for(int i = 0; i < files.length; i++) {
+      File f = files[i];
+      
+      long lastModified = f.lastModified();
+      if(lastModified > 0 && lastModified < olderThan) {
+        result = false;
+        continue;
+      }
+      
+      if(f.isDirectory()) {
+        result = deleteFilesRecursively(f, olderThan) && result;
+      }
+      else {
+        result = f.delete() && result;
+      }
+    }
+    if(result) {
+      return file.delete();
+    }
     return result;
   }
   
