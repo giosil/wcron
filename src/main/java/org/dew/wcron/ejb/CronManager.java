@@ -145,6 +145,9 @@ class CronManager implements ICronManager
       if(exists) {
         activity.setCreatedAt(activityEntity.getInsDate());
       }
+      else {
+        activity.setCreatedAt(new Date());
+      }
     }
     catch(Exception ex) {
       logger.fine("addActivity(" + activity + ") exists=" + exists + " em.find: " + ex);

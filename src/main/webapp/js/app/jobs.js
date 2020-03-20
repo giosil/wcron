@@ -4,13 +4,18 @@ function _initPageApp(){
 	
 	// Load data
 	$.ajax({
-	
+		
+		type: "GET",
 		url: "/wcron/scheduler/manager/listJobs"
 	
 	}).then(function(data) {
 	
 		_table.setData(data);
 	
+	}).fail(function() {
+		
+		alert('An error has occurred.');
+		
 	});
 	
 }

@@ -34,6 +34,14 @@
       <h1>Activities</h1>
       
       <div class="row">
+        <div class="col-md-12 text-right">
+          <button type="button" class="btn btn-primary" data-toggle="modal" id="btnAdd">
+            Add Activity
+          </button>
+        </div>
+      </div>
+      
+      <div class="row">
         <div class="col-md-12">
           <table class="table" id="tabResult">
             <thead>
@@ -50,6 +58,33 @@
       </div>
       
     </div>
+  </div>
+  
+  <div class="modal fade" id="dlgAct" tabindex="-1" role="dialog" aria-labelledby="dlgActLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title" id="dlgActLabel">Activity</h3>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <label for="name">Name</label>
+          <input type="text" id="name" name="name" class="form-control" placeholder="Name" required>
+          <label for="uri">URI</label>
+          <input type="text" id="uri" name="uri" class="form-control" placeholder="URI" required>
+          <label for="parameters">Parameters</label>
+          <input type="text" id="parameters" name="parameters" class="form-control" placeholder="Parameters" required>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary" id="btnSave">Save</button>
+      </div>
+    </div>
+  </div>
   </div>
   
   <script src="js/jquery-3.4.1.js"></script>
