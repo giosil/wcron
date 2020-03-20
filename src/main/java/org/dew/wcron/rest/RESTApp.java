@@ -12,8 +12,8 @@ import org.dew.wcron.auth.WContainerRequestFilter;
 public 
 class RESTApp extends Application 
 {
-  public static final String NAME = "wcron";
-  public static final String VER  = "1.0.5";
+  public static final String NAME = "WCron";
+  public static final String VER  = "1.0.6";
   
   private Set<Class<?>> classes = new HashSet<Class<?>>();
   private Set<Object> singletons = new HashSet<Object>();

@@ -1,6 +1,10 @@
 package org.dew.wcron.util;
 
+import java.io.IOException;
+import java.io.Writer;
+
 import java.lang.reflect.Array;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -15,6 +19,8 @@ import org.dew.wcron.jpa.JobEntity;
 public 
 class DataUtil 
 {
+  public static long STARTUP_TIME = System.currentTimeMillis();
+  
   public static 
   Activity toActivity(ActivityEntity activityEntity) 
   {
@@ -40,6 +46,7 @@ class DataUtil
     result.setActivity(activity);
     result.setExpression(jobEntity.getExpression());
     result.setParameters(JSONUtils.parseObject(jobEntity.getParameters(), false));
+    result.setLastExecution(jobEntity.getLastExecution());
     result.setLastResult(jobEntity.getLastResult());
     result.setLastError(jobEntity.getLastError());
     result.setElapsed(jobEntity.getElapsed());
@@ -57,6 +64,24 @@ class DataUtil
       stringBuilder.append(text);
     }
     return stringBuilder.toString();
+  }
+  
+  public static
+  void css(Writer out, String href)
+    throws IOException
+  {
+    if(href == null || href.length() == 0) return;
+    String html= "<link href=\"" + href + "?" + STARTUP_TIME + "\" rel=\"stylesheet\">";
+    out.write(html);
+  }
+  
+  public static
+  void script(Writer out, String src)
+    throws IOException
+  {
+    if(src == null || src.length() == 0) return;
+    String html= "<script src=\"" + src + "?" + STARTUP_TIME + "\" type=\"text/javascript\"></script>";
+    out.write(html);
   }
   
   @SuppressWarnings("unchecked")

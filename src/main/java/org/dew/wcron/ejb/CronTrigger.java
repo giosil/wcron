@@ -219,6 +219,7 @@ class CronTrigger implements ICronTrigger
     int    elapsed       = 0;
     long startTime = lastExceution.getTime();
     
+    job.setLastExecution(lastExceution);
     job.setLastResult("");
     job.setLastError("");
     job.setElapsed(0);

@@ -8,7 +8,7 @@ import java.util.Map;
 public 
 class Job implements Serializable, Comparable<Job>
 {
-  private static final long serialVersionUID = -4319840799598937004L;
+  private static final long serialVersionUID = 3595099018454237747L;
   
   private long id;
   private Activity activity;
@@ -16,6 +16,7 @@ class Job implements Serializable, Comparable<Job>
   private Map<String,Object> parameters;
   private boolean running;
   private boolean requestInterrupt;
+  private Date lastExecution;
   private String lastResult;
   private String lastError;
   private Date createdAt;
@@ -79,6 +80,14 @@ class Job implements Serializable, Comparable<Job>
 
   public void setRequestInterrupt(boolean requestInterrupt) {
     this.requestInterrupt = requestInterrupt;
+  }
+
+  public Date getLastExecution() {
+    return lastExecution;
+  }
+
+  public void setLastExecution(Date lastExecution) {
+    this.lastExecution = lastExecution;
   }
 
   public String getLastResult() {

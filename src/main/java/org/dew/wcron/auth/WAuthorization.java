@@ -1,11 +1,14 @@
 package org.dew.wcron.auth;
 
+import java.security.Principal;
 import java.util.Base64;
 
 import java.util.logging.Logger;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.dew.wcron.util.LoggerFactory;
 
@@ -19,12 +22,99 @@ class WAuthorization
   public static final String REALM_NAME   = "WCron";
   public static final String AUTHENTICATE = AUTH_SCHEME + " realm=\"" + REALM_NAME + "\"";
   
+  public static final String AUTH_SESSION = "Session";
+  public static final String SESSION_ATTR = "User";
+  public static final String LOGIN_PAGE   = "login.jsp";
+  public static final String HOME_PAGE    = "index.jsp";
+  public static final String PARAM_USER   = "j_username";
+  public static final String PARAM_PASS   = "j_password";
+  
+  public static
+  void logout(HttpServletRequest request)
+  {
+    try {
+      Principal principal = request.getUserPrincipal();
+      if(principal != null) {
+        request.logout();
+      }
+      
+      HttpSession httpSession = request.getSession();
+      if(httpSession != null) {
+        httpSession.invalidate();
+      }
+    }
+    catch(Exception ex) {
+      System.err.println("WAuthorization.logout: " + ex);
+    }
+  }
+  
+  public static
+  WPrincipal getUserPrincipal(HttpServletRequest request)
+  {
+    Principal principal = request.getUserPrincipal();
+    
+    if(principal instanceof WPrincipal) {
+      return (WPrincipal) principal;
+    }
+    else if(principal != null) {
+      return new WPrincipal(principal.getName());
+    }
+    
+    HttpSession httpSession = request.getSession();
+    if(httpSession != null) {
+      Object sessionAuth = httpSession.getAttribute(SESSION_ATTR);
+      if(sessionAuth instanceof WPrincipal) {
+        return (WPrincipal) sessionAuth;
+      }
+    }
+    
+    return null;
+  }
+  
+  public static
+  WPrincipal getUserPrincipal(HttpServletRequest request, HttpServletResponse response)
+  {
+    Principal principal = request.getUserPrincipal();
+    
+    if(principal instanceof WPrincipal) {
+      return (WPrincipal) principal;
+    }
+    else if(principal != null) {
+      return new WPrincipal(principal.getName());
+    }
+    
+    HttpSession httpSession = request.getSession();
+    if(httpSession != null) {
+      Object sessionAuth = httpSession.getAttribute(SESSION_ATTR);
+      if(sessionAuth instanceof WPrincipal) {
+        return (WPrincipal) sessionAuth;
+      }
+    }
+    
+    try {
+      RequestDispatcher requestDispatcher = request.getRequestDispatcher(LOGIN_PAGE);
+      requestDispatcher.forward(request, response);
+    }
+    catch(Exception ex) {
+      logger.severe("Exception in WAuthorization.getUserPrincipal(request, response): " + ex);
+    }
+    
+    return null;
+  }
+  
   public static
   WPrincipal checkAuthorization(HttpServletRequest request, HttpServletResponse response)
   {
-    if(request == null) return null;
     WPrincipal result = null;
     try {
+      HttpSession httpSession = request.getSession();
+      if(httpSession != null) {
+        Object sessionAuth = httpSession.getAttribute(SESSION_ATTR);
+        if(sessionAuth instanceof WPrincipal) {
+          return (WPrincipal) sessionAuth;
+        }
+      }
+      
       String authorization = request.getHeader("Authorization");
       if(authorization == null || authorization.length() == 0) {
         response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
@@ -39,7 +129,7 @@ class WAuthorization
       }
     }
     catch(Exception ex) {
-      logger.severe("Exception in WAuthorization.checkAuthorization(request): " + ex);
+      logger.severe("Exception in WAuthorization.checkAuthorization(request,response): " + ex);
     }
     return result;
   }
@@ -66,6 +156,27 @@ class WAuthorization
       String username = credentials.substring(0,sep);
       String password = credentials.substring(sep+1);
       
+      return checkAuthorization(username, password);
+    }
+    catch(Exception ex) {
+      logger.severe("Exception in WAuthorization.checkAuthorization(" + authorization + "): " + ex);
+    }
+    
+    return null;
+  }
+  
+  public static
+  WPrincipal checkAuthorization(String username, String password)
+    throws Exception
+  {
+    logger.fine("checkAuthorization(" + username + ",*)...");
+    
+    if(username == null || password == null) {
+      logger.warning("Invalid credentials (" + username + ",*)");
+      return null;
+    }
+    
+    try {
       if(username.equalsIgnoreCase(password)) {
         return new WPrincipal(username);
       }
@@ -74,7 +185,7 @@ class WAuthorization
       }
     }
     catch(Exception ex) {
-      logger.severe("Exception in WAuthorization.checkAuthorization(" + authorization + "): " + ex);
+      logger.severe("Exception in WAuthorization.checkAuthorization(" + username + ",*): " + ex);
     }
     
     return null;

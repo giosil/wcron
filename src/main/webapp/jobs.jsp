@@ -1,4 +1,4 @@
-<%@page import="java.security.Principal, org.dew.wcron.auth.WAuthorization, org.dew.wcron.rest.RESTApp"%>
+<%@page import="java.security.Principal, org.dew.wcron.auth.WAuthorization, org.dew.wcron.util.DataUtil, org.dew.wcron.rest.RESTApp"%>
 <%
   Principal principal = WAuthorization.getUserPrincipal(request, response);
   if(principal == null) return;
@@ -15,7 +15,7 @@
   <link href="css/bootstrap.min.css" rel="stylesheet">
   
   <link href="css/main.css" rel="stylesheet">
-
+  
   <link href="css/plugins/jquery-ui/jquery-ui-1.10.4.custom.min.css" rel="stylesheet">
   <link href="css/plugins/datapicker/datepicker3.css" rel="stylesheet">
   
@@ -30,18 +30,31 @@
   
   <div class="container">
     <div class="starter-template" id="view-root">
-      <h1><%= RESTApp.NAME %> RESTful API</h1>
-      <a href="scheduler/manager/info" target="_blank">info</a><br />
-      <a href="scheduler/manager/listActivities" target="_blank">listActivities</a><br />
-      <a href="#">addActivity (POST)</a><br />
-      <a href="scheduler/manager/removeActivity/demo" target="_blank">removeActivity/{activityName}</a><br />
-      <a href="scheduler/manager/listJobs" target="_blank">listJobs</a><br />
-      <a href="scheduler/manager/schedule/demo/1000_5000" target="_blank">schedule/{activityName}/{expression}</a><br />
-      <a href="scheduler/manager/removeJob/1" target="_blank">removeJob/{jobId}</a><br />
-      <a href="scheduler/manager/getJob/1" target="_blank">getJob/{jobId}</a><br />
-      <a href="scheduler/manager/clean" target="_blank">clean</a><br />
-      <hr>
-      <a href="out">Directory listint output folder</a>
+      
+      <h1>Jobs</h1>
+      
+      <div class="row">
+        <div class="col-md-12">
+          <table class="table" id="tabResult">
+            <thead>
+              <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Activity</th>
+                <th scope="col">Expression</th>
+                <th scope="col">Created At</th>
+                <th scope="col">Running</th>
+                <th scope="col">Last Execution</th>
+                <th scope="col">Last Result</th>
+                <th scope="col">Last Error</th>
+                <th scope="col">Elapsed [ms]</th>
+              </tr>
+            </thead>
+            <tbody>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      
     </div>
   </div>
   
@@ -52,5 +65,15 @@
   <script src="js/plugins/datapicker/bootstrap-datepicker.js" type="text/javascript"></script>
   
   <script src="js/i18n/datapicker/bootstrap-datepicker.it.js" type="text/javascript"></script>
+  
+  <% DataUtil.script(out, "js/app/jobs.js"); %>
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+      
+      _initPageApp();
+      
+    });
+  </script>
 </body>
 </html>

@@ -1,5 +1,8 @@
-<%@page import="java.io.File, java.util.List, org.dew.wcron.rest.RESTApp, org.dew.wcron.util.DataUtil"%>
+<%@page import="java.io.File, java.security.Principal, java.util.List, org.dew.wcron.auth.WAuthorization, org.dew.wcron.rest.RESTApp, org.dew.wcron.util.DataUtil"%>
 <%
+  Principal principal = WAuthorization.getUserPrincipal(request, response);
+  if(principal == null) return; 
+  
   String root    = DataUtil.expectString(request.getAttribute("root"), "/");
   String curr    = DataUtil.expectString(request.getAttribute("curr"), ".");
   String message = DataUtil.expectString(request.getAttribute("message"));
@@ -9,7 +12,6 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="utf-8">
   <title><%= RESTApp.NAME %> <%= RESTApp.VER %></title>
 </head>
 <body>
