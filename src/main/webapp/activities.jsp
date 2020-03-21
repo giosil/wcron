@@ -39,51 +39,47 @@
         </div>
       </div>
       
-      <div class="row">
-        <div class="col-md-12">
-          <table class="table" id="tabResult">
-            <thead>
-              <tr>
-                <th scope="col">Name</th>
-                <th scope="col">URI</th>
-                <th scope="col">Created At</th>
-                <th scope="col">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-            </tbody>
-          </table>
-        </div>
+      <div class="table-responsive">
+        <table class="table table-bordered table-striped table-hover" id="tabResult">
+          <thead>
+            <tr>
+              <th scope="col">Name</th>
+              <th scope="col">URI</th>
+              <th scope="col">Created At</th>
+              <th scope="col" class="text-center">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
       </div>
       
     </div>
   </div>
   
   <div class="modal fade" id="dlgEdit" tabindex="-1" role="dialog" aria-labelledby="dlgEditLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h3 class="modal-title" id="dlgEditLabel">Activity</h3>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <form>
-          <label for="name">Name</label>
-          <input type="text" id="name" name="name" class="form-control" placeholder="Name" required>
-          <label for="uri">URI</label>
-          <input type="text" id="uri" name="uri" class="form-control" placeholder="URI" required>
-          <label for="parameters">Parameters</label>
-          <input type="text" id="parameters" name="parameters" class="form-control" placeholder="Parameters" required>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-        <button type="button" class="btn btn-primary" id="btnSave">Save</button>
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 class="modal-title" id="dlgEditLabel">Activity</h3>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        </div>
+        <div class="modal-body">
+          <form id="frmDialog">
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name" class="form-control" placeholder="Name" required>
+            <label for="uri">URI</label>
+            <input type="text" id="uri" name="uri" class="form-control" placeholder="URI" required>
+            <label for="parameters">Parameters</label>
+            <input type="text" id="parameters" name="parameters" class="form-control" placeholder="Parameters">
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-primary" id="btnSave">Save</button>
+        </div>
       </div>
     </div>
-  </div>
   </div>
   
   <script src="js/jquery-3.4.1.js"></script>
@@ -94,6 +90,7 @@
   
   <script src="js/i18n/datapicker/bootstrap-datepicker.it.js" type="text/javascript"></script>
   
+  <script src="js/app/_common.js?<%= DataUtil.STARTUP_TIME %>" type="text/javascript"></script>
   <script src="js/app/activities.js?<%= DataUtil.STARTUP_TIME %>" type="text/javascript"></script>
   
   <script type="text/javascript">

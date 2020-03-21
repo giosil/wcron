@@ -60,7 +60,7 @@ function doAdd(){
 }
 
 function doRemove(i){
-  var c=confirm('Are you sure?');
+  var c=confirm('Are you sure to remove the job?');
   if(!c) return;
   
   var r=_table.records[i];
@@ -70,7 +70,7 @@ function doRemove(i){
     url: "/wcron/scheduler/manager/removeJob/" + r['id']
   }).then(function(res){
     if(!res) {
-      alert('Job not removed.');
+      alert('Activity not removed.');
       return;
     }
     reload();
@@ -130,12 +130,19 @@ function TableJobs(id){
     var index=$(this).index();
     if(_this.selIndex!=index){
       _this.selIndex=index;
-      _this.onSelection();
+      _this.onSelection(e);
     }
   });
+  $(this.idtable).on('dblclick', 'tbody tr', function(e){
+    _this.selIndex=$(this).index();
+    _this.onDblClick(e);
+  });
 }
-TableJobs.prototype.onSelection=function(){
-  console.log('TableJobs.onSelection selIndex=' + this.selIndex);
+TableJobs.prototype.onSelection=function(e){
+  console.log('onSelection selIndex=' + this.selIndex);
+}
+TableJobs.prototype.onDblClick=function(e){
+  console.log('onDblClick selIndex=' + this.selIndex);
 }
 TableJobs.prototype.clear=function(){
   this.records=[];
@@ -171,44 +178,10 @@ TableJobs.prototype.refresh=function(){
     rows+='<td>'+r['elapsed']+'</td>';
     // Row actions
     rows+='<td><div class="btn-group">';
-    rows+='<button class="btn btn-xs btn-default" onclick="doRemove(' + i + ')">Remove</button>';
+    rows+='<button class="btn btn-xs btn-default" style="margin-right: 4px;"  onclick="doRemove(' + i + ')">Remove</button>';
     rows+='</div></td>'; 
     rows+='</tr>';
   }
   $(this.idtable+' tbody').html(rows);
 }
 
-//Common utilities
-
-function _formatDateTime(v){
-  if(v == null || v == 0) return '';
-  if(typeof v == 'string') return v;
-  var d = '';
-  if(v instanceof Date){
-    d = v;
-  }
-  else if(typeof v == 'number'){
-    d = new Date(v);
-  }
-  return d.toLocaleString();
-}
-function _ojbToJson(obj) {
-  if(obj == null) return '';
-  if(typeof obj == 'object') {
-    return JSON.stringify(obj);
-  }
-  return '';
-}
-function _jsonToObj(json){
-  if(json == null) return {};
-  json = json.trim();
-  if(json.length < 7 && json.charAt(0) != '{') return {};
-  var obj = {};
-  try { 
-    obj = JSON.parse(json); 
-  }
-  catch(err){ 
-    console.error('Invalid object: ' + json); 
-  }
-  return obj;
-}

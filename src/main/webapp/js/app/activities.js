@@ -22,6 +22,10 @@ function _initPageApp(){
     onDlgShow();
   });
   
+  _table.onDblClick = function(e) {
+    doEdit(_table.selIndex);
+  }
+  
   loadData();
   
 }
@@ -63,6 +67,7 @@ function doAdd(){
 }
 
 function doEdit(i){
+  if(i < 0) return;
   var r=_table.records[i];
   _name.val(r['name']);
   _uri.val(r['uri']);
@@ -72,6 +77,26 @@ function doEdit(i){
   
   _dialog.data('op','edit');
   _dialog.modal('show');
+}
+
+function doRemove(i){
+  var c=confirm('Are you sure to remove the activity?');
+  if(!c) return;
+  
+  var r=_table.records[i];
+  
+  $.ajax({
+    type: "GET",
+    url: "/wcron/scheduler/manager/removeActivity/" + r['name']
+  }).then(function(res){
+    if(!res) {
+      alert('Job not removed.');
+      return;
+    }
+    reload();
+  }).fail(function() {
+    alert('An error has occurred.');
+  });
 }
 
 function doSave(){
@@ -125,12 +150,19 @@ function TableActivities(id){
     var index=$(this).index();
     if(_this.selIndex!=index){
       _this.selIndex=index;
-      _this.onSelection();
+      _this.onSelection(e);
     }
   });
+  $(this.idtable).on('dblclick', 'tbody tr', function(e){
+    _this.selIndex=$(this).index();
+    _this.onDblClick(e);
+  });
 }
-TableActivities.prototype.onSelection=function(){
-  console.log('TableActivities.onSelection selIndex=' + this.selIndex);
+TableActivities.prototype.onSelection=function(e){
+  console.log('onSelection selIndex=' + this.selIndex);
+}
+TableActivities.prototype.onDblClick=function(e){
+  console.log('onDblClick selIndex=' + this.selIndex);
 }
 TableActivities.prototype.clear=function(){
   this.records=[];
@@ -160,44 +192,11 @@ TableActivities.prototype.refresh=function(){
     rows+='<td>'+_formatDateTime(r['createdAt'])+'</td>';
     // Row actions
     rows+='<td><div class="btn-group">';
-    rows+='<button class="btn btn-xs btn-default" onclick="doEdit(' + i + ')">Edit</button>';
+    rows+='<button class="btn btn-xs btn-default" style="margin-right: 4px;" onclick="doEdit(' + i + ')">Edit</button>';
+    rows+='<button class="btn btn-xs btn-default" style="margin-right: 4px;" onclick="doRemove(' + i + ')">Remove</button>';
     rows+='</div></td>'; 
     rows+='</tr>';
   }
   $(this.idtable+' tbody').html(rows);
 }
 
-// Common utilities
-
-function _formatDateTime(v){
-  if(v == null || v == 0) return '';
-  if(typeof v == 'string') return v;
-  var d = '';
-  if(v instanceof Date){
-    d = v;
-  }
-  else if(typeof v == 'number'){
-    d = new Date(v);
-  }
-  return d.toLocaleString();
-}
-function _ojbToJson(obj) {
-  if(obj == null) return '';
-  if(typeof obj == 'object') {
-    return JSON.stringify(obj);
-  }
-  return '';
-}
-function _jsonToObj(json){
-  if(json == null) return {};
-  json = json.trim();
-  if(json.length < 7 && json.charAt(0) != '{') return {};
-  var obj = {};
-  try { 
-    obj = JSON.parse(json); 
-  }
-  catch(err){ 
-    console.error('Invalid object: ' + json); 
-  }
-  return obj;
-}

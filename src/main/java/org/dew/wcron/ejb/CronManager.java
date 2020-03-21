@@ -53,7 +53,7 @@ class CronManager implements ICronManager
   
   @Override
   public Map<String, Object> load() {
-    logger.fine("CronManager.load()...");
+    logger.fine("load()...");
     
     Map<String, Object> mapResult = new HashMap<String, Object>();
     
@@ -66,11 +66,11 @@ class CronManager implements ICronManager
     
     List<ActivityEntity> listActivity = null;
     try {
-      logger.fine("CronManager.load() Activities.findAll...");
+      logger.fine("load() Activities.findAll...");
       listActivity = em.createNamedQuery("Activities.findAll", ActivityEntity.class).getResultList();
     }
     catch(Exception ex) {
-      logger.fine("CronManager.load() Activities.findAll: " + ex);
+      logger.fine("load() Activities.findAll: " + ex);
     }
     
     if(listActivity == null) {
@@ -87,28 +87,33 @@ class CronManager implements ICronManager
       
       findJobQuery.setParameter("activityName", name);
       
-      JobEntity jobEntity = null;
+      List<JobEntity> listOfjobEntity = null;
       try {
-        jobEntity = findJobQuery.getSingleResult();
+        listOfjobEntity = findJobQuery.getResultList();
       }
       catch(Exception ex) {
-        logger.fine("CronManager.load() findJobQuery by activityName=" + name + ": " + ex);
+        logger.fine("load() findJobQuery by activityName=" + name + ": " + ex);
       }
-      if(jobEntity == null) continue;
       
-      long jobId = jobEntity.getId();
+      if(listOfjobEntity == null || listOfjobEntity.size() == 0) {
+        continue;
+      }
       
-      jobs.put(jobId, toJob(activityEntity, jobEntity));
-      
-      boolean scheduled = cronTrigger.schedule(jobId, jobEntity.getExpression());
-      
-      if(!scheduled) jobs.remove(jobId);
+      listOfjobEntity.forEach(jobEntity -> {
+        long jobId = jobEntity.getId();
+        
+        jobs.put(jobId, toJob(activityEntity, jobEntity));
+        
+        boolean scheduled = cronTrigger.schedule(jobId, jobEntity.getExpression());
+        
+        if(!scheduled) jobs.remove(jobId);
+      });
     }
     
     mapResult.put("activities", activities.size());
     mapResult.put("jobs", jobs.size());
     
-    logger.fine("CronManager.load() -> " + mapResult);
+    logger.fine("load() -> " + mapResult);
     return mapResult;
   }
   
@@ -182,6 +187,22 @@ class CronManager implements ICronManager
     
     boolean result = false;
     try {
+      TypedQuery<JobEntity> findJobQuery = em.createNamedQuery("Jobs.findByActivityName", JobEntity.class);
+      
+      findJobQuery.setParameter("activityName", activityName);
+      
+      List<JobEntity> listOfjobEntity = findJobQuery.getResultList();
+      
+      if(listOfjobEntity != null) {
+        
+        long countNotRemoved = listOfjobEntity.stream().filter(j -> !removeJob(j.getId())).count();
+        
+        if(countNotRemoved != 0) {
+          return false;
+        }
+        
+      }
+      
       ActivityEntity activityEntity = em.find(ActivityEntity.class, activityName);
       
       em.remove(activityEntity);
