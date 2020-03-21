@@ -33,11 +33,9 @@
       
       <h1>Activities</h1>
       
-      <div class="row">
+      <div class="row" style="padding-bottom: 8px">
         <div class="col-md-12 text-right">
-          <button type="button" class="btn btn-primary" data-toggle="modal" id="btnAdd">
-            Add Activity
-          </button>
+          <button type="button" class="btn btn-primary" data-toggle="modal" id="btnAdd">Add Activity</button>
         </div>
       </div>
       
@@ -49,6 +47,7 @@
                 <th scope="col">Name</th>
                 <th scope="col">URI</th>
                 <th scope="col">Created At</th>
+                <th scope="col">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -60,11 +59,11 @@
     </div>
   </div>
   
-  <div class="modal fade" id="dlgAct" tabindex="-1" role="dialog" aria-labelledby="dlgActLabel" aria-hidden="true">
+  <div class="modal fade" id="dlgEdit" tabindex="-1" role="dialog" aria-labelledby="dlgEditLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h3 class="modal-title" id="dlgActLabel">Activity</h3>
+        <h3 class="modal-title" id="dlgEditLabel">Activity</h3>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -89,13 +88,13 @@
   
   <script src="js/jquery-3.4.1.js"></script>
   <script src="js/bootstrap.min.js"></script>
-
+  
   <script src="js/plugins/jquery-ui/jquery-ui.min.js" type="text/javascript"></script>
   <script src="js/plugins/datapicker/bootstrap-datepicker.js" type="text/javascript"></script>
   
   <script src="js/i18n/datapicker/bootstrap-datepicker.it.js" type="text/javascript"></script>
   
-  <% DataUtil.script(out, "js/app/activities.js"); %>
+  <script src="js/app/activities.js?<%= DataUtil.STARTUP_TIME %>" type="text/javascript"></script>
   
   <script type="text/javascript">
     $(document).ready(function(){

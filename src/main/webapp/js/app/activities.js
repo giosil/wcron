@@ -1,184 +1,203 @@
 var _table   = new TableActivities('#tabResult');
-
 var _btnAdd  = $('#btnAdd');
-
-var _dialog  = $('#dlgAct');
-
+var _dialog  = $('#dlgEdit');
 var _name    = $('#name');
 var _uri     = $('#uri');
 var _params  = $('#parameters');
 var _btnSave = $('#btnSave');
 
+// Functions
+
 function _initPageApp(){
-	
-	// Load data
-	$.ajax({
-		
-		type: "GET",
-		url: "/wcron/scheduler/manager/listActivities"
-	
-	}).then(function(data) {
-	
-		_table.setData(data);
-	
-	}).fail(function() {
-		
-		alert('An error has occurred.');
-		
-	});
-	
-	_btnAdd.on('click', function(e){
-		_name.val('');
-		_uri.val('');
-		_params.val('');
-		
-		_dialog.data('op','add');
-		_dialog.modal('show');
-	});
-	
-	_btnSave.on('click', function(e){
-		var dlgop = _dialog.data('op');
-		
-		var name  = _name.val();
-		var uri   = _uri.val();
-		var parms = _params.val();
-		
-		if(!name) {
-			alert('Invalid name');
-			_name.focus();
-			return;
-		}
-		if(!uri) {
-			alert('Invalid URI');
-			_uri.focus();
-			return;
-		}
-		
-		var record = {"name": name, "uri": uri, "parameters": _getParameters(parms)};
-		
-		$.ajax({
-			
-			type: "POST",
-			url: "/wcron/scheduler/manager/addActivity",
-			contentType: "application/json; charset=utf-8",
-			dataType: "json",
-			data: JSON.stringify(record)
-		
-		}).then(function(res) {
-			if(res) {
-				record['createdAt'] = new Date();
-				_table.addRecord(record);
-			}
-			else {
-				alert('Activity not added.');
-			}
-		
-		}).fail(function() {
-			
-			alert('An error has occurred.');
-			
-		});
-		
-		_dialog.modal('hide');
-	});
-	
-	_dialog.on('shown.bs.modal', function(e){
-		_name.trigger('focus')
-	});
-	
+  
+  _btnAdd.on('click', function(e){
+    doAdd();
+  });
+  
+  _btnSave.on('click', function(e){
+    doSave();
+  });
+  
+  _dialog.on('shown.bs.modal', function(e){
+    onDlgShow();
+  });
+  
+  loadData();
+  
 }
+
+function loadData(){
+  $.ajax({
+    type: "GET",
+    url: "/wcron/scheduler/manager/listActivities"
+  }).then(function(data){
+    _table.setData(data);
+  }).fail(function() {
+    alert('An error has occurred.');
+  });
+}
+
+function reload(){
+  setTimeout(function(){ loadData(); }, 100);
+}
+
+function onDlgShow(){
+  var dlgop = _dialog.data('op');
+  if(dlgop == 'edit') {
+    _uri.focus();
+  }
+  else {
+    _name.focus();
+  }
+}
+
+function doAdd(){
+  _name.val('');
+  _uri.val('');
+  _params.val('');
+  
+  _name.prop('disabled', false);
+  
+  _dialog.data('op','add');
+  _dialog.modal('show');
+}
+
+function doEdit(i){
+  var r=_table.records[i];
+  _name.val(r['name']);
+  _uri.val(r['uri']);
+  _params.val(_ojbToJson(r['parameters']));
+  
+  _name.prop('disabled', true);
+  
+  _dialog.data('op','edit');
+  _dialog.modal('show');
+}
+
+function doSave(){
+  var dlgop  = _dialog.data('op');
+  var name   = _name.val();
+  var uri    = _uri.val();
+  var params = _params.val();
+  
+  console.log('op=' + dlgop + ',name=' + name + ',uri=' + uri);
+  
+  if(!name) {
+    alert('Invalid name');
+    _name.focus();
+    return;
+  }
+  if(!uri) {
+    alert('Invalid URI');
+    _uri.focus();
+    return;
+  }
+  
+  $.ajax({
+    type: "POST",
+    url: "/wcron/scheduler/manager/addActivity",
+    contentType: "application/json; charset=utf-8",
+    dataType: "json",
+    data: JSON.stringify({"name":name, "uri":uri, "parameters":_jsonToObj(params)})
+  }).then(function(res){
+    if(!res) {
+      alert('Activity not added.');
+      return;
+    }
+    reload();
+  }).fail(function(){
+    alert('An error has occurred.');
+  });
+  
+  _dialog.modal('hide');
+}
+
+// GUI Objects
 
 function TableActivities(id){
-	this.records=[];
-	this.idtable=id;
-	this.selIndex=-1;
-	var _this=this;
-	
-	$(this.idtable).on('click', 'tbody tr', function(event){
-		$(this).addClass('success').siblings().removeClass('success');
-		var index=$(this).index();
-		if(_this.selIndex!=index){
-			_this.selIndex=index;
-			_this.onSelection();
-		}
-	});
+  this.records=[];
+  this.idtable=id;
+  this.selIndex=-1;
+  var _this=this;
+  
+  $(this.idtable).on('click', 'tbody tr', function(e){
+    $(this).addClass('success').siblings().removeClass('success');
+    var index=$(this).index();
+    if(_this.selIndex!=index){
+      _this.selIndex=index;
+      _this.onSelection();
+    }
+  });
 }
 TableActivities.prototype.onSelection=function(){
-	if(this.selIndex<0)return;
-	console.log('TableActivities.onSelection selIndex=' + this.selIndex);
+  console.log('TableActivities.onSelection selIndex=' + this.selIndex);
 }
 TableActivities.prototype.clear=function(){
-	this.records=[];
-	this.selIndex=-1;
-	$(this.idtable+' tbody').html("");
+  this.records=[];
+  this.selIndex=-1;
+  $(this.idtable+' tbody').html('');
 }
 TableActivities.prototype.clearSelection=function(){
-	this.selIndex=-1;
-	$(this.idtable+' tbody tr').removeClass('success');
+  this.selIndex=-1;
+  $(this.idtable+' tbody tr').removeClass('success');
 }
 TableActivities.prototype.setData=function(data){
-	if(!$.isArray(data)){
-		this.records=[];
-		$(this.idtable+' tbody').html("");
-		return;
-	}
-	this.records=data;
-	this.refresh();
-}
-TableActivities.prototype.addRecord=function(record){
-	if(record == null) return;
-	if(this.records == null) this.records=[];
-	this.records.push(record);
-	this.refresh();
+  if(!$.isArray(data)){
+    this.records=[];
+    $(this.idtable+' tbody').html('');
+    return;
+  }
+  this.records=data;
+  this.refresh();
 }
 TableActivities.prototype.refresh=function(){
-	if(this.records == null) this.records=[];
-	var rows='';
-	for(var i=0;i<this.records.length;i++){
-		var r=this.records[i];
-		rows+='<tr>';
-		rows+='<td>'+r['name']+'</td>';
-		rows+='<td>'+r['uri']+'</td>';
-		rows+='<td>'+_formatDateTime(r['createdAt'])+'</td>';
-		rows+='</tr>';
-	}
-	$(this.idtable+' tbody').html(rows);
+  var rows='';
+  for(var i=0;i<this.records.length;i++){
+    var r=this.records[i];
+    rows+='<tr>';
+    rows+='<td>'+r['name']+'</td>';
+    rows+='<td>'+r['uri']+'</td>';
+    rows+='<td>'+_formatDateTime(r['createdAt'])+'</td>';
+    // Row actions
+    rows+='<td><div class="btn-group">';
+    rows+='<button class="btn btn-xs btn-default" onclick="doEdit(' + i + ')">Edit</button>';
+    rows+='</div></td>'; 
+    rows+='</tr>';
+  }
+  $(this.idtable+' tbody').html(rows);
 }
 
-function _formatDateTime(v) {
-	if(v == null || v == 0) return '';
-	if (typeof v == 'string') {
-		return v;
-	}
-	var d;
-	if (v instanceof Date) {
-		d = v;
-	}
-	if (typeof v == 'number') {
-		d = new Date(v);
-	}
-	if(d == null) return '';
-	var m = d.getMonth() + 1;
-	var sm = m < 10 ? '0' + m : '' + m;
-	var sd = d.getDate() < 10 ? '0' + d.getDate() : '' + d.getDate();
-	var sh = d.getHours() < 10 ? '0' + d.getHours() : '' + d.getHours();
-	var sp = d.getMinutes() < 10 ? '0' + d.getMinutes() : '' + d.getMinutes();
-	return sd + '/' + sm + '/' + d.getFullYear() + ' ' + sh + ':' + sp;
-}
+// Common utilities
 
-function _getParameters(v) {
-	if(v == null) return {};
-	v = v.trim();
-	if(v.length < 7) return {};
-	if(v.charAt(0) != '{') return {};
-	if(v.charAt(v.length-1) != '}') return {};
-	var res = null;
-	try {
-		res = JSON.parse(v);
-	}
-	catch(err) {
-		alert('Invalid parameters.');
-	}
-	if(res == null) return {};
-	return res;
+function _formatDateTime(v){
+  if(v == null || v == 0) return '';
+  if(typeof v == 'string') return v;
+  var d = '';
+  if(v instanceof Date){
+    d = v;
+  }
+  else if(typeof v == 'number'){
+    d = new Date(v);
+  }
+  return d.toLocaleString();
+}
+function _ojbToJson(obj) {
+  if(obj == null) return '';
+  if(typeof obj == 'object') {
+    return JSON.stringify(obj);
+  }
+  return '';
+}
+function _jsonToObj(json){
+  if(json == null) return {};
+  json = json.trim();
+  if(json.length < 7 && json.charAt(0) != '{') return {};
+  var obj = {};
+  try { 
+    obj = JSON.parse(json); 
+  }
+  catch(err){ 
+    console.error('Invalid object: ' + json); 
+  }
+  return obj;
 }
