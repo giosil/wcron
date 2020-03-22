@@ -13,6 +13,8 @@ interface ICronManager
   
   public Activity[] listActivities();
   
+  public String[] getActivityNames();
+  
   public int countActivities();
   
   public boolean addActivity(Activity activity);

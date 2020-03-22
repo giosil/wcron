@@ -74,7 +74,8 @@
         <div class="modal-body">
           <form id="frmDialog">
             <label for="activity">Activity</label>
-            <input type="text" id="activity" name="activity" class="form-control" placeholder="Activity" required>
+            <select id="activity" name="activity" class="form-control" required>
+            </select>
             <label for="expression">Expression</label>
             <input type="text" id="expression" name="expression" class="form-control" placeholder="Expression" required>
             <label for="parameters">Parameters</label>

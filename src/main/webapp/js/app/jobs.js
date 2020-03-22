@@ -6,6 +6,7 @@ var _activity   = $('#activity');
 var _expression = $('#expression');
 var _params     = $('#parameters');
 var _btnSave    = $('#btnSave');
+var _load_act   = true;
 
 //Functions
 
@@ -42,11 +43,31 @@ function loadData(){
   });
 }
 
+function loadActivityNames(){
+  $.ajax({
+    type: "GET",
+    url: "/wcron/scheduler/manager/getActivityNames"
+  }).then(function(data){
+    if(data == null) return;
+    var options = '';
+    for(var i = 0; i < data.length; i++){
+      options += '<option>' + data[i] + '</option>';
+    }
+    _activity.html(options);
+    _load_act = false;
+  }).fail(function() {
+    alert('An error has occurred.');
+  });
+}
+
 function reload(){
   setTimeout(function(){ loadData(); }, 100);
 }
 
 function onDlgShow(){
+  if(_load_act) {
+    loadActivityNames();
+  }
   _activity.focus();
 }
 

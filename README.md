@@ -51,6 +51,16 @@ Response:<br />
 HTTP/1.1 200 OK<br />
 `[{"name":"demo","uri":"mock","parameters":{"greeting":"hello"},"createdAt":1584313200000}]`
 
+### getActivityNames
+Get list of activity name available.<br />
+
+Request:<br />
+**GET** `http://localhost:8080/wcron/scheduler/manager/getActivityNames`
+
+Response:<br />
+HTTP/1.1 200 OK<br />
+`["demo"]`
+
 ### addActivity
 Define an activity.<br />
 

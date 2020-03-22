@@ -51,18 +51,6 @@ class DataUtil
     return result;
   }
   
-  public static
-  String repeat(String text, int times, String zeroTimesValue)
-  {
-    if(times <= 0) return zeroTimesValue;
-    if(times == 1) return text;
-    StringBuilder stringBuilder = new StringBuilder();
-    for(int i = 0; i < times; i++) {
-      stringBuilder.append(text);
-    }
-    return stringBuilder.toString();
-  }
-  
   @SuppressWarnings("unchecked")
   public static <T> 
   T[] expectArray(Object o, Class<T> itemClass)

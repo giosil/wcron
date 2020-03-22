@@ -92,6 +92,20 @@ class RESTCronManager
     return cronManager.listActivities();
   }
   
+  @GET
+  @Path("/getActivityNames")
+  @Produces(MediaType.APPLICATION_JSON)
+  @WSecure
+  public 
+  String[] getActivityNames()
+  {
+    Principal principal = securityContext.getUserPrincipal();
+    
+    logger.fine(principal + "@" + uriInfo.getPath() + " getActivityNames()...");
+    
+    return cronManager.getActivityNames();
+  }
+  
   @POST
   @Path("/addActivity")
   @Consumes(MediaType.APPLICATION_JSON)

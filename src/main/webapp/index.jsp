@@ -33,6 +33,7 @@
       <h1><%= RESTApp.NAME %> RESTful API</h1>
       <a href="scheduler/manager/info" target="_blank">info</a><br />
       <a href="scheduler/manager/listActivities" target="_blank">listActivities</a><br />
+      <a href="scheduler/manager/getActivityNames" target="_blank">getActivityNames</a><br />
       <a href="#">addActivity (POST)</a><br />
       <a href="scheduler/manager/removeActivity/demo" target="_blank">removeActivity/{activityName}</a><br />
       <a href="scheduler/manager/listJobs" target="_blank">listJobs</a><br />

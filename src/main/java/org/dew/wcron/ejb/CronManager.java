@@ -28,7 +28,7 @@ import org.dew.wcron.api.Job;
 
 import org.dew.wcron.jpa.ActivityEntity;
 import org.dew.wcron.jpa.JobEntity;
-
+import org.dew.wcron.util.JPAUtils;
 import org.dew.wcron.util.LoggerFactory;
 
 import static org.dew.wcron.util.DataUtil.toActivity;
@@ -52,7 +52,9 @@ class CronManager implements ICronManager
   protected ICronTrigger cronTrigger;
   
   @Override
-  public Map<String, Object> load() {
+  public 
+  Map<String, Object> load() 
+  {
     logger.fine("load()...");
     
     Map<String, Object> mapResult = new HashMap<String, Object>();
@@ -118,17 +120,38 @@ class CronManager implements ICronManager
   }
   
   @Override
-  public Activity[] listActivities() {
+  public 
+  Activity[] listActivities() 
+  {
     return activities.values().stream().sorted().toArray(Activity[]::new);
   }
   
   @Override
-  public int countActivities() {
+  public 
+  String[] getActivityNames()
+  {
+    String[] result = null;
+    try {
+      result = JPAUtils.readArrayOfString(em, "SELECT NAME FROM ACTIVITIES ORDER BY NAME");
+    }
+    catch(Exception ex) {
+      logger.severe("getActivityNames(): " + ex);
+    }
+    if(result == null) result = new String[0];
+    return result;
+  }
+  
+  @Override
+  public 
+  int countActivities() 
+  {
     return activities.size();
   }
   
   @Override
-  public boolean addActivity(Activity activity) {
+  public 
+  boolean addActivity(Activity activity) 
+  {
     if(activity == null) {
       return false;
     }
@@ -180,7 +203,9 @@ class CronManager implements ICronManager
   }
   
   @Override
-  public boolean removeActivity(String activityName) {
+  public 
+  boolean removeActivity(String activityName) 
+  {
     if(activityName == null || activityName.length() == 0) {
       return false;
     }
@@ -219,12 +244,16 @@ class CronManager implements ICronManager
   }
   
   @Override
-  public long schedule(String activityName, String expression) {
+  public 
+  long schedule(String activityName, String expression) 
+  {
     return schedule(activityName, expression, null);
   }
   
   @Override
-  public long schedule(String activityName, String expression, Map<String,Object> parameters) {
+  public 
+  long schedule(String activityName, String expression, Map<String,Object> parameters) 
+  {
     if(activityName == null || activityName.length() == 0) {
       return 0;
     }
@@ -259,7 +288,9 @@ class CronManager implements ICronManager
   }
   
   @Override
-  public boolean removeJob(long jobId) {
+  public 
+  boolean removeJob(long jobId) 
+  {
     boolean cancelled = cronTrigger.cancel(jobId);
     
     if(cancelled) {
@@ -279,17 +310,23 @@ class CronManager implements ICronManager
   }
   
   @Override
-  public boolean cancelAll() {
+  public 
+  boolean cancelAll() 
+  {
     return cronTrigger.cancelAll();
   }
   
   @Override
-  public Job getJob(long jobId) {
+  public 
+  Job getJob(long jobId) 
+  {
     return jobs.get(jobId);
   }
   
   @Override
-  public boolean notifyExecution(long jobId, Date lastExecution, String lastResult, String lastError, int elapsed) {
+  public 
+  boolean notifyExecution(long jobId, Date lastExecution, String lastResult, String lastError, int elapsed) 
+  {
     boolean result = false;
     
     JobEntity jobEntity = null;
@@ -321,14 +358,17 @@ class CronManager implements ICronManager
     return result;
   }
   
-  
   @Override
-  public Job[] listJobs() {
+  public 
+  Job[] listJobs() 
+  {
     return jobs.values().stream().sorted().toArray(Job[]::new);
   }
   
   @Override
-  public int countJobs() {
+  public 
+  int countJobs() 
+  {
     return jobs.size();
   }
 }
