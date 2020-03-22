@@ -34,7 +34,7 @@ function loadData(){
   $.ajax({
     type: "GET",
     url: "/wcron/scheduler/manager/listActivities"
-  }).done(function(res, status, jqXHR){
+  }).done(function(res, status, jqxhr){
     _table.setData(res);
   }).fail(function(jqxhr, status, error){
     console.log('response: ' + jqxhr.responseText + ', status: ' + status + ', error: ' + error);
@@ -89,7 +89,7 @@ function doRemove(i){
   $.ajax({
     type: "GET",
     url: "/wcron/scheduler/manager/removeActivity/" + r['name']
-  }).done(function(res, status, jqXHR){
+  }).done(function(res, status, jqxhr){
     if(!res) {
       alert('Activity not removed.');
       return;
@@ -126,7 +126,7 @@ function doSave(){
     contentType: "application/json; charset=utf-8",
     dataType: "json",
     data: JSON.stringify({"name":name, "uri":uri, "parameters":_jsonToObj(params)})
-  }).done(function(res, status, jqXHR){
+  }).done(function(res, status, jqxhr){
     if(!res) {
       alert('Activity not added.');
       return;

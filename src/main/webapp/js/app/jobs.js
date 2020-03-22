@@ -36,7 +36,7 @@ function loadData(){
   $.ajax({
     type: "GET",
     url: "/wcron/scheduler/manager/listJobs"
-  }).done(function(res, status, jqXHR){
+  }).done(function(res, status, jqxhr){
     _table.setData(res);
   }).fail(function(jqxhr, status, error){
     console.log('response: ' + jqxhr.responseText + ', status: ' + status + ', error: ' + error);
@@ -48,7 +48,7 @@ function loadActivityNames(){
   $.ajax({
     type: "GET",
     url: "/wcron/scheduler/manager/getActivityNames"
-  }).done(function(res, status, jqXHR){
+  }).done(function(res, status, jqxhr){
     if(res == null) return;
     var options = '';
     for(var i=0; i < res.length; i++){
@@ -94,7 +94,7 @@ function doRemove(i){
   $.ajax({
     type: "GET",
     url: "/wcron/scheduler/manager/removeJob/" + r['id']
-  }).done(function(res, status, jqXHR){
+  }).done(function(res, status, jqxhr){
     if(!res) {
       alert('Activity not removed.');
       return;
@@ -131,7 +131,7 @@ function doSave(){
     contentType: "application/json; charset=utf-8",
     dataType: "json",
     data: JSON.stringify(_jsonToObj(params))
-  }).done(function(res, status, jqXHR){
+  }).done(function(res, status, jqxhr){
     if(!res) {
       alert('Job not scheduled.');
       return;
