@@ -36,9 +36,10 @@ function loadData(){
   $.ajax({
     type: "GET",
     url: "/wcron/scheduler/manager/listJobs"
-  }).then(function(data){
-    _table.setData(data);
-  }).fail(function() {
+  }).done(function(res, status, jqXHR){
+    _table.setData(res);
+  }).fail(function(jqxhr, status, error){
+    console.log('response: ' + jqxhr.responseText + ', status: ' + status + ', error: ' + error);
     alert('An error has occurred.');
   });
 }
@@ -47,15 +48,16 @@ function loadActivityNames(){
   $.ajax({
     type: "GET",
     url: "/wcron/scheduler/manager/getActivityNames"
-  }).then(function(data){
-    if(data == null) return;
+  }).done(function(res, status, jqXHR){
+    if(res == null) return;
     var options = '';
-    for(var i = 0; i < data.length; i++){
-      options += '<option>' + data[i] + '</option>';
+    for(var i=0; i < res.length; i++){
+      options += '<option>' + res[i] + '</option>';
     }
     _activity.html(options);
     _load_act = false;
-  }).fail(function() {
+  }).fail(function(jqxhr, status, error){
+    console.log('response: ' + jqxhr.responseText + ', status: ' + status + ', error: ' + error);
     alert('An error has occurred.');
   });
 }
@@ -67,6 +69,9 @@ function reload(){
 function onDlgShow(){
   if(_load_act) {
     loadActivityNames();
+  }
+  else {
+    _activity.prop("selectedIndex", 0);
   }
   _activity.focus();
 }
@@ -89,13 +94,14 @@ function doRemove(i){
   $.ajax({
     type: "GET",
     url: "/wcron/scheduler/manager/removeJob/" + r['id']
-  }).then(function(res){
+  }).done(function(res, status, jqXHR){
     if(!res) {
       alert('Activity not removed.');
       return;
     }
     reload();
-  }).fail(function() {
+  }).fail(function(jqxhr, status, error){
+    console.log('response: ' + jqxhr.responseText + ', status: ' + status + ', error: ' + error);
     alert('An error has occurred.');
   });
 }
@@ -125,13 +131,14 @@ function doSave(){
     contentType: "application/json; charset=utf-8",
     dataType: "json",
     data: JSON.stringify(_jsonToObj(params))
-  }).then(function(res){
+  }).done(function(res, status, jqXHR){
     if(!res) {
       alert('Job not scheduled.');
       return;
     }
     reload();
-  }).fail(function(){
+  }).fail(function(jqxhr, status, error){
+    console.log('response: ' + jqxhr.responseText + ', status: ' + status + ', error: ' + error);
     alert('An error has occurred.');
   });
   

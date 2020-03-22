@@ -20,11 +20,13 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.container.AsyncResponse;
 import javax.ws.rs.container.Suspended;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriInfo;
 
@@ -117,6 +119,11 @@ class RESTCronManager
     Principal principal = securityContext.getUserPrincipal();
     
     logger.fine(principal + "@" + uriInfo.getPath() + " addActivity(" + activity + ")...");
+    
+    String activityName = activity.getName();
+    if(activityName == null || activityName.length() < 2) {
+      throw new WebApplicationException("Invalid activity name", Response.serverError().entity("Invalid activity name").build());
+    }
     
     return cronManager.addActivity(activity);
   }

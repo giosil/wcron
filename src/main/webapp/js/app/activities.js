@@ -34,9 +34,10 @@ function loadData(){
   $.ajax({
     type: "GET",
     url: "/wcron/scheduler/manager/listActivities"
-  }).then(function(data){
-    _table.setData(data);
-  }).fail(function() {
+  }).done(function(res, status, jqXHR){
+    _table.setData(res);
+  }).fail(function(jqxhr, status, error){
+    console.log('response: ' + jqxhr.responseText + ', status: ' + status + ', error: ' + error);
     alert('An error has occurred.');
   });
 }
@@ -88,13 +89,14 @@ function doRemove(i){
   $.ajax({
     type: "GET",
     url: "/wcron/scheduler/manager/removeActivity/" + r['name']
-  }).then(function(res){
+  }).done(function(res, status, jqXHR){
     if(!res) {
-      alert('Job not removed.');
+      alert('Activity not removed.');
       return;
     }
     reload();
-  }).fail(function() {
+  }).fail(function(jqxhr, status, error){
+    console.log('response: ' + jqxhr.responseText + ', status: ' + status + ', error: ' + error);
     alert('An error has occurred.');
   });
 }
@@ -124,13 +126,14 @@ function doSave(){
     contentType: "application/json; charset=utf-8",
     dataType: "json",
     data: JSON.stringify({"name":name, "uri":uri, "parameters":_jsonToObj(params)})
-  }).then(function(res){
+  }).done(function(res, status, jqXHR){
     if(!res) {
       alert('Activity not added.');
       return;
     }
     reload();
-  }).fail(function(){
+  }).fail(function(jqxhr, status, error){
+    console.log('response: ' + jqxhr.responseText + ', status: ' + status + ', error: ' + error);
     alert('An error has occurred.');
   });
   
