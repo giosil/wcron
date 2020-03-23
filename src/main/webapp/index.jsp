@@ -31,16 +31,17 @@
   <div class="container">
     <div class="starter-template" id="view-root">
       <h1><%= RESTApp.NAME %> RESTful API</h1>
-      <a href="scheduler/manager/info" target="_blank">info</a><br />
-      <a href="scheduler/manager/listActivities" target="_blank">listActivities</a><br />
-      <a href="scheduler/manager/getActivityNames" target="_blank">getActivityNames</a><br />
-      <a href="#">addActivity (POST)</a><br />
-      <a href="scheduler/manager/removeActivity/demo" target="_blank">removeActivity/{activityName}</a><br />
-      <a href="scheduler/manager/listJobs" target="_blank">listJobs</a><br />
-      <a href="scheduler/manager/schedule/demo/1000_5000" target="_blank">schedule/{activityName}/{expression}</a><br />
-      <a href="scheduler/manager/removeJob/1" target="_blank">removeJob/{jobId}</a><br />
-      <a href="scheduler/manager/getJob/1" target="_blank">getJob/{jobId}</a><br />
-      <a href="scheduler/manager/clean" target="_blank">clean</a><br />
+      <span class="badge badge-info">GET</span> <a href="scheduler/manager/info" target="_blank">info</a><br />
+      <span class="badge badge-primary">GET</span> <a href="scheduler/manager/listActivities" target="_blank">listActivities</a><br />
+      <span class="badge badge-primary">GET</span> <a href="scheduler/manager/getActivityNames" target="_blank">getActivityNames</a><br />
+      <span class="badge badge-success">POST</span> <a href="scheduler/manager/addActivity" target="_blank">addActivity</a><br />
+      <span class="badge badge-danger">GET</span> <a href="scheduler/manager/removeActivity/demo" target="_blank">removeActivity/{activityName}</a><br />
+      <span class="badge badge-primary">GET</span> <a href="scheduler/manager/listJobs" target="_blank">listJobs</a><br />
+      <span class="badge badge-primary">GET</span> <a href="scheduler/manager/schedule/demo/1000_5000" target="_blank">schedule/{activityName}/{expression}</a><br />
+      <span class="badge badge-success">POST</span> <a href="scheduler/manager/schedule/demo/1000_5000" target="_blank">schedule/{activityName}/{expression}</a><br />
+      <span class="badge badge-danger">GET</span> <a href="scheduler/manager/removeJob/1" target="_blank">removeJob/{jobId}</a><br />
+      <span class="badge badge-primary">GET</span> <a href="scheduler/manager/getJob/1" target="_blank">getJob/{jobId}</a><br />
+      <span class="badge badge-warning">GET</span> <a href="scheduler/manager/clean" target="_blank">clean</a><br />
       <hr>
       <a href="out">Directory listint output folder</a>
     </div>

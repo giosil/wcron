@@ -1,2 +1,381 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<con:soapui-project id="72af2075-e66b-4994-a697-c76ffeb81d94" activeEnvironment="Default" name="wcron" resourceRoot="" soapui-version="5.5.0" abortOnError="false" runType="SEQUENTIAL" xmlns:con="http://eviware.com/soapui/config"><con:settings/><con:interface xsi:type="con:RestService" id="60dba33f-98ae-4ad6-95ff-3527e1ca20e5" wadlVersion="http://wadl.dev.java.net/2009/02" name="http://localhost:8080" type="rest" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart=""/><con:endpoints><con:endpoint>http://localhost:8080</con:endpoint></con:endpoints><con:resource name="info" path="/wcron/scheduler/manager/info" id="d9dca276-0636-4d65-95d1-dd0dfb489fcd"><con:settings/><con:parameters/><con:method name="GET_scheduler/manager/info" id="bf1f7121-053b-4a67-a666-ed722ae1714d" method="GET"><con:settings/><con:parameters/><con:representation type="RESPONSE"><con:mediaType>application/json</con:mediaType><con:status>200</con:status><con:params/><con:element xmlns:info="http://localhost/wcron/scheduler/manager/info">info:Response</con:element></con:representation><con:representation type="FAULT"><con:mediaType>application/json</con:mediaType><con:status>403 401</con:status><con:params/></con:representation><con:representation type="FAULT"><con:mediaType>text/html;charset=UTF-8</con:mediaType><con:status>500</con:status><con:params/><con:element>html</con:element></con:representation><con:request name="info" id="662f278d-a27a-45bd-ba79-4b28e15f1a7d" mediaType="application/json"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:endpoint>http://localhost:8080</con:endpoint><con:request/><con:originalUri>http://localhost/wcron/scheduler/manager/info</con:originalUri><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:parameters/></con:request></con:method></con:resource><con:resource name="listActivities" path="/wcron/scheduler/manager/listActivities" id="9c5c8032-5301-4adb-bdec-e2cf9111d129"><con:settings/><con:parameters/><con:method name="GET_scheduler/manager/listActivities" id="9bdbe9bf-ceaa-409f-96d9-b0ba74e5d399" method="GET"><con:settings/><con:parameters/><con:representation type="RESPONSE"><con:mediaType>application/json</con:mediaType><con:status>200</con:status><con:params/><con:element>Response</con:element></con:representation><con:request name="listActivities" id="3d718586-ca3d-49cf-8fad-faf615649e05" mediaType="application/json"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:endpoint>http://localhost:8080</con:endpoint><con:request/><con:originalUri>http://localhost/wcron/scheduler/manager/listActivities</con:originalUri><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:parameters/></con:request></con:method></con:resource><con:resource name="addActivity" path="/wcron/scheduler/manager/addActivity" id="4ac8339c-eab7-4b5d-bdce-48b5aa9c4fe0"><con:settings/><con:parameters/><con:method name="POST_scheduler/manager/addActivity" id="6ef6afb2-3db3-4434-bf8d-7cc814c1494d" method="POST"><con:settings/><con:parameters/><con:representation type="FAULT"><con:mediaType>text/html</con:mediaType><con:status>400</con:status><con:params/><con:element>html</con:element></con:representation><con:representation type="REQUEST"><con:mediaType>application/json</con:mediaType><con:params/></con:representation><con:representation type="RESPONSE"><con:mediaType>application/json</con:mediaType><con:status>200</con:status><con:params/></con:representation><con:request name="addActivity_test" id="4a0459f6-671b-43fb-9700-6a0ea9587c6d" mediaType="application/json" postQueryString="false"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:endpoint>http://localhost:8080</con:endpoint><con:request>{"name": "test", "uri": "org.dew.test.JobTest", "parameters": {"greeting": "saluti"}}</con:request><con:originalUri>http://localhost/wcron/scheduler/manager/addActivity</con:originalUri><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:parameters/></con:request></con:method></con:resource><con:resource name="removeActivity" path="/wcron/scheduler/manager/removeActivity/test" id="7b9a226f-fd0c-4067-8d75-7f5e4ceeb045"><con:settings/><con:parameters/><con:method name="GET_scheduler/manager/removeActivity" id="4ca76630-50e0-4508-af58-7e3d5792e2ef" method="GET"><con:settings/><con:parameters/><con:representation type="RESPONSE"><con:mediaType>application/json</con:mediaType><con:status>200</con:status><con:params/></con:representation><con:request name="removeActivity_test" id="9974dfec-3471-468a-8583-8d17d7150ff3" mediaType="application/json"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:endpoint>http://localhost:8080</con:endpoint><con:request/><con:originalUri>http://localhost/wcron/scheduler/manager/removeActivity/test</con:originalUri><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:parameters/></con:request></con:method></con:resource><con:resource name="listJobs" path="/wcron/scheduler/manager/listJobs" id="f994f1ce-8581-4782-a0e8-0a4877a78588"><con:settings/><con:parameters/><con:method name="GET_scheduler/manager/listJobs" id="04d0f061-2cff-4bc3-8cf2-04891943dfa6" method="GET"><con:settings/><con:parameters/><con:representation type="RESPONSE"><con:mediaType>application/json</con:mediaType><con:status>200</con:status><con:params/><con:element>Response</con:element></con:representation><con:representation type="FAULT"><con:mediaType>text/html</con:mediaType><con:status>404</con:status><con:params/><con:element>html</con:element></con:representation><con:request name="listJobs" id="c36f9ba1-10e3-4e97-8a2b-4345645205f5" mediaType="application/json"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:endpoint>http://localhost:8080</con:endpoint><con:request/><con:originalUri>http://localhost/wcron/scheduler/manager/listJobs</con:originalUri><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:parameters/></con:request></con:method></con:resource><con:resource name="schedule" path="/wcron/scheduler/manager/schedule/test/1000_3000" id="f1fbd413-610d-4111-9e51-1015c11696db"><con:settings/><con:parameters/><con:method name="GET_scheduler/manager/schedule" id="215c3336-7744-4705-9b0c-18df699d1249" method="GET"><con:settings/><con:parameters/><con:representation type="RESPONSE"><con:mediaType>application/json</con:mediaType><con:status>200</con:status><con:params/></con:representation><con:representation type="FAULT"><con:mediaType>text/html;charset=UTF-8</con:mediaType><con:status>500</con:status><con:params/><con:element>html</con:element></con:representation><con:request name="schedule_test_1000_3000" id="350dd16c-4133-41b6-a4c6-17bb98c51e41" mediaType="application/json"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:endpoint>http://localhost:8080</con:endpoint><con:request/><con:originalUri>http://localhost/wcron/scheduler/manager/schedule/test/1000_2000</con:originalUri><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:parameters/></con:request></con:method><con:method name="POST_scheduler/manager/schedule" id="1dff58fd-1430-45e4-8af9-cbc7b0aab096" method="POST"><con:settings/><con:parameters/><con:representation type="REQUEST"><con:mediaType>application/json</con:mediaType><con:params/></con:representation><con:representation type="RESPONSE"><con:mediaType>application/json</con:mediaType><con:status>200</con:status><con:params/></con:representation><con:request name="schedule_test_1000_3000_with_params" id="b27a40dc-2c79-4164-aca4-5d9cf5dcfde6" mediaType="application/json" postQueryString="false"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:endpoint>http://localhost:8080</con:endpoint><con:request>{"greeting": "ciao"}</con:request><con:originalUri>http://localhost/wcron/scheduler/manager/schedule/test/1000_3000</con:originalUri><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:parameters/></con:request></con:method></con:resource><con:resource name="removeJob" path="/wcron/scheduler/manager/removeJob/2" id="f407331b-ca0a-4d5d-8710-eb8a24cfb44a"><con:settings/><con:parameters/><con:method name="GET_scheduler/manager/removeJob" id="e3902b78-f976-43bd-8acb-aafb10fba7e2" method="GET"><con:settings/><con:parameters/><con:representation type="RESPONSE"><con:mediaType>application/json</con:mediaType><con:status>200</con:status><con:params/></con:representation><con:representation type="FAULT"><con:mediaType>text/html;charset=UTF-8</con:mediaType><con:status>500</con:status><con:params/><con:element>html</con:element></con:representation><con:request name="removeJob_2" id="39d223a4-2e70-4a19-b845-e7b6d765f4b9" mediaType="application/json"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:endpoint>http://localhost:8080</con:endpoint><con:request/><con:originalUri>http://localhost/wcron/scheduler/manager/schedule/removeJob/0000000001</con:originalUri><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:parameters/></con:request></con:method></con:resource><con:resource name="getJob" path="/wcron/scheduler/manager/getJob/1" id="ca0ce1db-a914-413e-b4be-548fd7e23d04"><con:settings/><con:parameters/><con:method name="GET_scheduler/manager/getJob" id="e79861db-54b4-43cd-a0a1-d67e2cbdf7ba" method="GET"><con:settings/><con:parameters/><con:representation type="RESPONSE"><con:mediaType>application/json</con:mediaType><con:status>200</con:status><con:params/><con:element xmlns:ns="http://localhost/wcron/scheduler/manager/getJob/1">ns:Response</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>204</con:status><con:params/><con:element>data</con:element></con:representation><con:request name="getJob_1" id="dee1d772-a3c3-442b-a080-478471dbeb5c" mediaType="application/json"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:endpoint>http://localhost:8080</con:endpoint><con:request/><con:originalUri>http://localhost/wcron/scheduler/manager/getJob/1</con:originalUri><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:parameters/></con:request></con:method></con:resource><con:resource name="clean" path="/wcron/scheduler/manager/clean" id="acc026ec-046d-49a6-9221-9b4f0ae8b48c"><con:settings/><con:parameters/><con:method name="GET_/wcron/scheduler/manager/clean" id="66fded52-e4a4-47fb-b0ad-63851f0a847b" method="GET"><con:settings/><con:parameters/><con:representation type="FAULT"><con:mediaType>text/html;charset=UTF-8</con:mediaType><con:status>500</con:status><con:params/><con:element>html</con:element></con:representation><con:representation type="FAULT"><con:mediaType>text/html</con:mediaType><con:status>404</con:status><con:params/><con:element>html</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType>application/json</con:mediaType><con:status>200</con:status><con:params/></con:representation><con:request name="clean" id="490c206c-8794-40bd-8d6e-aa15545fddf0" mediaType="application/json"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:endpoint>http://localhost:8080</con:endpoint><con:request/><con:originalUri>http://localhost/wcron/scheduler/manager/clean</con:originalUri><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:parameters/></con:request></con:method></con:resource><con:resource name="getActivityNames" path="/wcron/scheduler/manager/getActivityNames" id="9c5c8032-5301-4adb-bdec-e2cf9111d129"><con:settings/><con:parameters/><con:method name="GET_scheduler/manager/getActivityNames" id="9bdbe9bf-ceaa-409f-96d9-b0ba74e5d399" method="GET"><con:settings/><con:parameters/><con:representation type="RESPONSE"><con:mediaType>application/json</con:mediaType><con:status>200</con:status><con:params/><con:element>Response</con:element></con:representation><con:request name="getActivityNames" id="3d718586-ca3d-49cf-8fad-faf615649e05" mediaType="application/json"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:endpoint>http://localhost:8080</con:endpoint><con:request/><con:originalUri>http://localhost/wcron/scheduler/manager/listActivities</con:originalUri><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:parameters/></con:request></con:method></con:resource></con:interface><con:endpointStrategy xsi:type="con:DefaultEndpointStrategy" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:endpoint mode="COMPLEMENT" username="admin" password="admin">http://localhost:8080</con:endpoint></con:endpointStrategy><con:properties/><con:wssContainer/><con:oAuth2ProfileContainer/><con:oAuth1ProfileContainer/><con:sensitiveInformation/></con:soapui-project>
+<con:soapui-project id="72af2075-e66b-4994-a697-c76ffeb81d94" activeEnvironment="Default" name="wcron" resourceRoot="" soapui-version="5.5.0" abortOnError="false" runType="SEQUENTIAL" xmlns:con="http://eviware.com/soapui/config">
+  <con:settings/>
+  <con:interface xsi:type="con:RestService" id="60dba33f-98ae-4ad6-95ff-3527e1ca20e5" wadlVersion="http://wadl.dev.java.net/2009/02" name="WCron" type="rest" basePath="/wcron" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <con:settings/>
+    <con:definitionCache type="TEXT" rootPart=""/>
+    <con:endpoints>
+      <con:endpoint>http://localhost:8080</con:endpoint>
+    </con:endpoints>
+    <con:resource name="info" path="/scheduler/manager/info" id="d9dca276-0636-4d65-95d1-dd0dfb489fcd">
+      <con:settings/>
+      <con:parameters/>
+      <con:method name="GET_scheduler/manager/info" id="bf1f7121-053b-4a67-a666-ed722ae1714d" method="GET">
+        <con:settings/>
+        <con:parameters/>
+        <con:representation type="RESPONSE">
+          <con:mediaType>application/json</con:mediaType>
+          <con:status>200</con:status>
+          <con:params/>
+        </con:representation>
+        <con:request name="info" id="662f278d-a27a-45bd-ba79-4b28e15f1a7d" mediaType="application/json">
+          <con:settings>
+            <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting>
+          </con:settings>
+          <con:endpoint>http://localhost:8080</con:endpoint>
+          <con:request/>
+          <con:credentials>
+            <con:authType>No Authorization</con:authType>
+          </con:credentials>
+          <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+          <con:jmsPropertyConfig/>
+          <con:parameters/>
+        </con:request>
+      </con:method>
+    </con:resource>
+    <con:resource name="listActivities" path="/scheduler/manager/listActivities" id="9c5c8032-5301-4adb-bdec-e2cf9111d129">
+      <con:settings/>
+      <con:parameters/>
+      <con:method name="GET_scheduler/manager/listActivities" id="9bdbe9bf-ceaa-409f-96d9-b0ba74e5d399" method="GET">
+        <con:settings/>
+        <con:parameters/>
+        <con:representation type="RESPONSE">
+          <con:mediaType>application/json</con:mediaType>
+          <con:status>200</con:status>
+          <con:params/>
+          <con:element>Response</con:element>
+        </con:representation>
+        <con:request name="listActivities" id="3d718586-ca3d-49cf-8fad-faf615649e05" mediaType="application/json">
+          <con:settings>
+            <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting>
+          </con:settings>
+          <con:endpoint>http://localhost:8080</con:endpoint>
+          <con:request/>
+          <con:credentials>
+            <con:authType>No Authorization</con:authType>
+          </con:credentials>
+          <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+          <con:jmsPropertyConfig/>
+          <con:parameters/>
+        </con:request>
+      </con:method>
+    </con:resource>
+    <con:resource name="addActivity" path="/scheduler/manager/addActivity" id="4ac8339c-eab7-4b5d-bdce-48b5aa9c4fe0">
+      <con:settings/>
+      <con:parameters/>
+      <con:method name="POST_scheduler/manager/addActivity" id="6ef6afb2-3db3-4434-bf8d-7cc814c1494d" method="POST">
+        <con:settings/>
+        <con:parameters/>
+        <con:representation type="REQUEST">
+          <con:mediaType>application/json</con:mediaType>
+          <con:params/>
+        </con:representation>
+        <con:representation type="RESPONSE">
+          <con:mediaType>application/json</con:mediaType>
+          <con:status>200</con:status>
+          <con:params/>
+        </con:representation>
+        <con:request name="addActivity_test" id="4a0459f6-671b-43fb-9700-6a0ea9587c6d" mediaType="application/json" postQueryString="false">
+          <con:settings>
+            <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting>
+          </con:settings>
+          <con:endpoint>http://localhost:8080</con:endpoint>
+          <con:request>{"name": "test", "uri": "org.dew.test.JobTest", "parameters": {"greeting": "saluti"}}</con:request>
+          <con:credentials>
+            <con:authType>No Authorization</con:authType>
+          </con:credentials>
+          <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+          <con:jmsPropertyConfig/>
+          <con:parameters/>
+        </con:request>
+      </con:method>
+    </con:resource>
+    <con:resource name="removeActivity" path="/scheduler/manager/removeActivity/{activityName}" id="7b9a226f-fd0c-4067-8d75-7f5e4ceeb045">
+      <con:settings/>
+      <con:parameters>
+        <con:parameter>
+          <con:name>activityName</con:name>
+          <con:value/>
+          <con:style>TEMPLATE</con:style>
+          <con:default/>
+          <con:description xsi:nil="true"/>
+        </con:parameter>
+      </con:parameters>
+      <con:method name="GET_scheduler/manager/removeActivity" id="4ca76630-50e0-4508-af58-7e3d5792e2ef" method="GET">
+        <con:settings/>
+        <con:parameters/>
+        <con:representation type="RESPONSE">
+          <con:mediaType>application/json</con:mediaType>
+          <con:status>200</con:status>
+          <con:params/>
+        </con:representation>
+        <con:request name="removeActivity_demo" id="9974dfec-3471-468a-8583-8d17d7150ff3" mediaType="application/json">
+          <con:settings>
+            <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting>
+          </con:settings>
+          <con:endpoint>http://localhost:8080</con:endpoint>
+          <con:request/>
+          <con:credentials>
+            <con:authType>No Authorization</con:authType>
+          </con:credentials>
+          <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+          <con:jmsPropertyConfig/>
+          <con:parameters>
+            <entry key="activityName" value="demo" xmlns="http://eviware.com/soapui/config"/>
+          </con:parameters>
+        <con:parameterOrder>
+            <con:entry>activityName</con:entry>
+          </con:parameterOrder>
+        </con:request>
+      </con:method>
+    </con:resource>
+    <con:resource name="listJobs" path="/scheduler/manager/listJobs" id="f994f1ce-8581-4782-a0e8-0a4877a78588">
+      <con:settings/>
+      <con:parameters/>
+      <con:method name="GET_scheduler/manager/listJobs" id="04d0f061-2cff-4bc3-8cf2-04891943dfa6" method="GET">
+        <con:settings/>
+        <con:parameters/>
+        <con:representation type="RESPONSE">
+          <con:mediaType>application/json</con:mediaType>
+          <con:status>200</con:status>
+          <con:params/>
+          <con:element>Response</con:element>
+        </con:representation>
+        <con:request name="listJobs" id="c36f9ba1-10e3-4e97-8a2b-4345645205f5" mediaType="application/json">
+          <con:settings>
+            <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting>
+          </con:settings>
+          <con:endpoint>http://localhost:8080</con:endpoint>
+          <con:request/>
+          <con:credentials>
+            <con:authType>No Authorization</con:authType>
+          </con:credentials>
+          <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+          <con:jmsPropertyConfig/>
+          <con:parameters/>
+        </con:request>
+      </con:method>
+    </con:resource>
+    <con:resource name="schedule" path="/scheduler/manager/schedule/{activityName}/{expression}" id="f1fbd413-610d-4111-9e51-1015c11696db">
+      <con:settings/>
+      <con:parameters>
+        <con:parameter>
+          <con:name>activityName</con:name>
+          <con:value/>
+          <con:style>TEMPLATE</con:style>
+          <con:default/>
+          <con:description xsi:nil="true"/>
+        </con:parameter>
+        <con:parameter>
+          <con:name>expression</con:name>
+          <con:value/>
+          <con:style>TEMPLATE</con:style>
+          <con:default/>
+          <con:description xsi:nil="true"/>
+        </con:parameter>
+      </con:parameters>
+      <con:method name="GET_scheduler/manager/schedule" id="215c3336-7744-4705-9b0c-18df699d1249" method="GET">
+        <con:settings/>
+        <con:parameters/>
+        <con:representation type="RESPONSE">
+          <con:mediaType>application/json</con:mediaType>
+          <con:status>200</con:status>
+          <con:params/>
+        </con:representation>
+        <con:request name="schedule_test_1000_5000" id="350dd16c-4133-41b6-a4c6-17bb98c51e41" mediaType="application/json">
+          <con:settings>
+            <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting>
+          </con:settings>
+          <con:endpoint>http://localhost:8080</con:endpoint>
+          <con:request/>
+          <con:credentials>
+            <con:authType>No Authorization</con:authType>
+          </con:credentials>
+          <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+          <con:jmsPropertyConfig/>
+          <con:parameters>
+            <con:entry key="expression" value="1000_5000"/>
+            <con:entry key="activityName" value="test"/>
+          </con:parameters>
+        <con:parameterOrder>
+            <con:entry>activityName</con:entry>
+            <con:entry>expression</con:entry>
+          </con:parameterOrder>
+        </con:request>
+      </con:method>
+      <con:method name="POST_scheduler/manager/schedule" id="1dff58fd-1430-45e4-8af9-cbc7b0aab096" method="POST">
+        <con:settings/>
+        <con:parameters/>
+        <con:representation type="REQUEST">
+          <con:mediaType>application/json</con:mediaType>
+          <con:params/>
+        </con:representation>
+        <con:representation type="RESPONSE">
+          <con:mediaType>application/json</con:mediaType>
+          <con:status>200</con:status>
+          <con:params/>
+        </con:representation>
+        <con:request name="schedule_test_1000_5000_with_params" id="b27a40dc-2c79-4164-aca4-5d9cf5dcfde6" mediaType="application/json" postQueryString="false">
+          <con:settings>
+            <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting>
+          </con:settings>
+          <con:endpoint>http://localhost:8080</con:endpoint>
+          <con:request>{"greeting": "ciao"}</con:request>
+          <con:credentials>
+            <con:authType>No Authorization</con:authType>
+          </con:credentials>
+          <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+          <con:jmsPropertyConfig/>
+          <con:parameters>
+            <con:entry key="expression" value="1000_5000"/>
+            <con:entry key="activityName" value="test"/>
+          </con:parameters>
+        <con:parameterOrder>
+            <con:entry>activityName</con:entry>
+            <con:entry>expression</con:entry>
+          </con:parameterOrder>
+        </con:request>
+      </con:method>
+    </con:resource>
+    <con:resource name="removeJob" path="/scheduler/manager/removeJob/{jobId}" id="f407331b-ca0a-4d5d-8710-eb8a24cfb44a">
+      <con:settings/>
+      <con:parameters>
+        <con:parameter>
+          <con:name>jobId</con:name>
+          <con:value/>
+          <con:style>TEMPLATE</con:style>
+          <con:default/>
+          <con:description xsi:nil="true"/>
+        </con:parameter>
+      </con:parameters>
+      <con:method name="GET_scheduler/manager/removeJob" id="e3902b78-f976-43bd-8acb-aafb10fba7e2" method="GET">
+        <con:settings/>
+        <con:parameters/>
+        <con:representation type="RESPONSE">
+          <con:mediaType>application/json</con:mediaType>
+          <con:status>200</con:status>
+          <con:params/>
+        </con:representation>
+        <con:request name="removeJob_1" id="39d223a4-2e70-4a19-b845-e7b6d765f4b9" mediaType="application/json">
+          <con:settings>
+            <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting>
+          </con:settings>
+          <con:endpoint>http://localhost:8080</con:endpoint>
+          <con:request/>
+          <con:credentials>
+            <con:authType>No Authorization</con:authType>
+          </con:credentials>
+          <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+          <con:jmsPropertyConfig/>
+          <con:parameters>
+            <entry key="jobId" value="1" xmlns="http://eviware.com/soapui/config"/>
+          </con:parameters>
+        <con:parameterOrder>
+            <con:entry>jobId</con:entry>
+          </con:parameterOrder>
+        </con:request>
+      </con:method>
+    </con:resource>
+    <con:resource name="getJob" path="/scheduler/manager/getJob/{jobId}" id="ca0ce1db-a914-413e-b4be-548fd7e23d04">
+      <con:settings/>
+      <con:parameters>
+        <con:parameter>
+          <con:name>jobId</con:name>
+          <con:value/>
+          <con:style>TEMPLATE</con:style>
+          <con:default/>
+          <con:description xsi:nil="true"/>
+        </con:parameter>
+      </con:parameters>
+      <con:method name="GET_scheduler/manager/getJob" id="e79861db-54b4-43cd-a0a1-d67e2cbdf7ba" method="GET">
+        <con:settings/>
+        <con:parameters/>
+        <con:representation type="RESPONSE">
+          <con:mediaType>application/json</con:mediaType>
+          <con:status>200</con:status>
+          <con:params/>
+          <con:element xmlns:ns="http://localhost/wcron/scheduler/manager/getJob/1">ns:Response</con:element>
+        </con:representation>
+        <con:request name="getJob_1" id="dee1d772-a3c3-442b-a080-478471dbeb5c" mediaType="application/json">
+          <con:settings>
+            <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting>
+          </con:settings>
+          <con:endpoint>http://localhost:8080</con:endpoint>
+          <con:request/>
+          <con:credentials>
+            <con:authType>No Authorization</con:authType>
+          </con:credentials>
+          <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+          <con:jmsPropertyConfig/>
+          <con:parameters>
+            <entry key="jobId" value="1" xmlns="http://eviware.com/soapui/config"/>
+          </con:parameters>
+        <con:parameterOrder>
+            <con:entry>jobId</con:entry>
+          </con:parameterOrder>
+        </con:request>
+      </con:method>
+    </con:resource>
+    <con:resource name="clean" path="/scheduler/manager/clean" id="acc026ec-046d-49a6-9221-9b4f0ae8b48c">
+      <con:settings/>
+      <con:parameters/>
+      <con:method name="GET_/wcron/scheduler/manager/clean" id="66fded52-e4a4-47fb-b0ad-63851f0a847b" method="GET">
+        <con:settings/>
+        <con:parameters/>
+        <con:representation type="RESPONSE">
+          <con:mediaType>application/json</con:mediaType>
+          <con:status>200</con:status>
+          <con:params/>
+        </con:representation>
+        <con:request name="clean" id="490c206c-8794-40bd-8d6e-aa15545fddf0" mediaType="application/json">
+          <con:settings>
+            <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting>
+          </con:settings>
+          <con:endpoint>http://localhost:8080</con:endpoint>
+          <con:request/>
+          <con:credentials>
+            <con:authType>No Authorization</con:authType>
+          </con:credentials>
+          <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+          <con:jmsPropertyConfig/>
+          <con:parameters/>
+        </con:request>
+      </con:method>
+    </con:resource>
+    <con:resource name="getActivityNames" path="/scheduler/manager/getActivityNames" id="9c5c8032-5301-4adb-bdec-e2cf9111d129">
+      <con:settings/>
+      <con:parameters/>
+      <con:method name="GET_scheduler/manager/getActivityNames" id="9bdbe9bf-ceaa-409f-96d9-b0ba74e5d399" method="GET">
+        <con:settings/>
+        <con:parameters/>
+        <con:representation type="RESPONSE">
+          <con:mediaType>application/json</con:mediaType>
+          <con:status>200</con:status>
+          <con:params/>
+          <con:element>Response</con:element>
+        </con:representation>
+        <con:request name="getActivityNames" id="3d718586-ca3d-49cf-8fad-faf615649e05" mediaType="application/json">
+          <con:settings>
+            <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting>
+          </con:settings>
+          <con:endpoint>http://localhost:8080</con:endpoint>
+          <con:request/>
+          <con:credentials>
+            <con:authType>No Authorization</con:authType>
+          </con:credentials>
+          <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+          <con:jmsPropertyConfig/>
+          <con:parameters/>
+        </con:request>
+      </con:method>
+    </con:resource>
+  </con:interface>
+  <con:endpointStrategy xsi:type="con:DefaultEndpointStrategy" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <con:endpoint mode="COMPLEMENT" username="admin" password="admin">http://localhost:8080</con:endpoint>
+  </con:endpointStrategy>
+  <con:properties/>
+  <con:wssContainer/>
+  <con:oAuth2ProfileContainer/>
+  <con:oAuth1ProfileContainer/>
+  <con:sensitiveInformation/>
+</con:soapui-project>
