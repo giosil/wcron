@@ -43,7 +43,7 @@
       <span class="badge badge-primary">GET</span> <a href="scheduler/manager/getJob/1" target="_blank">getJob/{jobId}</a><br />
       <span class="badge badge-warning">GET</span> <a href="scheduler/manager/clean" target="_blank">clean</a><br />
       <hr>
-      <a href="out">Directory listint output folder</a>
+      <a href="out">Directory listing output folder</a>
     </div>
   </div>
   

@@ -122,7 +122,8 @@ class RESTCronManager
     
     String activityName = activity.getName();
     if(activityName == null || activityName.length() < 2) {
-      throw new WebApplicationException("Invalid activity name", Response.serverError().entity("Invalid activity name").build());
+      throw new WebApplicationException("Invalid activity name", 
+          Response.serverError().entity("Invalid activity name").build());
     }
     
     return cronManager.addActivity(activity);
@@ -196,7 +197,14 @@ class RESTCronManager
     
     logger.fine(principal + "@" + uriInfo.getPath() + " getJob(" + jobId + ")...");
     
-    return cronManager.getJob(jobId);
+    Job job = cronManager.getJob(jobId);
+    
+    if(job == null) {
+      throw new WebApplicationException("Job " + jobId + " not found", 
+          Response.status(Response.Status.NOT_FOUND).entity("Job " + jobId + " not found").build());
+    }
+    
+    return job;
   }
   
   @GET

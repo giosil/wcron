@@ -1,0 +1,134 @@
+swagger: '2.0'
+info:
+  description: A job scheduler configurable through RESTful web services.
+  version: 1.0.6
+  title: WCron
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+host: 'localhost:8080'
+basePath: /wcron
+schemes:
+  - https
+  - http
+paths:
+  /scheduler/manager/addActivity:
+    post:
+      operationId: addActivity
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: Request body
+          required: true
+          schema:
+            type: object
+      responses:
+        '200':
+          description: success
+  /scheduler/manager/clean:
+    get:
+      operationId: clean
+      parameters: []
+      responses:
+        '200':
+          description: success
+  /scheduler/manager/getActivityNames:
+    get:
+      operationId: getActivityNames
+      parameters: []
+      responses:
+        '200':
+          description: success
+  '/scheduler/manager/getJob/{jobId}':
+    get:
+      operationId: getJob
+      parameters:
+        - name: jobId
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: success
+  /scheduler/manager/info:
+    get:
+      operationId: info
+      parameters: []
+      responses:
+        '200':
+          description: success
+  /scheduler/manager/listActivities:
+    get:
+      operationId: listActivities
+      parameters: []
+      responses:
+        '200':
+          description: success
+  /scheduler/manager/listJobs:
+    get:
+      operationId: listJobs
+      parameters: []
+      responses:
+        '200':
+          description: success
+  '/scheduler/manager/removeActivity/{activityName}':
+    get:
+      operationId: removeActivity
+      parameters:
+        - name: activityName
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: success
+  '/scheduler/manager/removeJob/{jobId}':
+    get:
+      operationId: removeJob
+      parameters:
+        - name: jobId
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: success
+  '/scheduler/manager/schedule/{activityName}/{expression}':
+    get:
+      operationId: schedule
+      parameters:
+        - name: activityName
+          in: path
+          required: true
+          type: string
+        - name: expression
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: success
+    post:
+      operationId: schedule_with_params
+      consumes:
+        - application/json
+      parameters:
+        - name: activityName
+          in: path
+          required: true
+          type: string
+        - name: expression
+          in: path
+          required: true
+          type: string
+        - in: body
+          name: body
+          description: Request body
+          required: true
+          schema:
+            type: object
+      responses:
+        '200':
+          description: success
