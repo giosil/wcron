@@ -12,6 +12,7 @@ function wait_for_server() {
   done
 }
 
+# Starting WildFly server in background
 echo "=> Starting WildFly server"
 echo "JBOSS_HOME: " $JBOSS_HOME
 echo "JBOSS_CLI : " $JBOSS_CLI
@@ -31,14 +32,17 @@ echo "=> Add hsqldb driver"
 $JBOSS_CLI -c --command="/subsystem=datasources/jdbc-driver=hsqldb:add(driver-name=hsqldb,driver-module-name=org.hsqldb,driver-class-name=org.hsqldb.jdbcDriver)"
 
 # Add datasource
-echo "=> Add application datasource"
+echo "=> Add datasource"
 $JBOSS_CLI -c --command="/subsystem=datasources/data-source=db_wcron:add(jndi-name=java:/jdbc/db_wcron, driver-name=hsqldb, connection-url=jdbc:hsqldb:mem:wcron)"
 
+# Deploy application 
+echo "=> Deploy application"
+$JBOSS_CLI -c --command="deploy $SETUP_DIR/wcron.war --force"
+
+# Shutting down 
 echo "=> Shutting down WildFly"
 $JBOSS_CLI -c --command="shutdown"
 
-echo "=> Deploy application"
-cp $SETUP_DIR/wcron.war $JBOSS_HOME/standalone/deployments
-
+# Restarting WildFly server in foreground
 echo "=> Restarting WildFly"
 $JBOSS_HOME/bin/standalone.sh -b 0.0.0.0
