@@ -54,6 +54,9 @@ class CronTrigger implements ICronTrigger
     if(expression == null || expression.length() == 0) {
       return false;
     }
+    if(expression.equalsIgnoreCase("none")) {
+      return true;
+    }
     
     boolean result = false;
     try {
