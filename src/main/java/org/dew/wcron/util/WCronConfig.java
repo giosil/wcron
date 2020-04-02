@@ -2,7 +2,7 @@ package org.dew.wcron.util;
 
 import java.io.File;
 import java.io.FileInputStream;
-
+import java.net.URLDecoder;
 import java.util.Properties;
 import java.util.logging.Logger;
 
@@ -43,10 +43,11 @@ class WCronConfig
     
     if(pathInfo != null && pathInfo.length() > 0) {
       char c0 = pathInfo.charAt(0);
-      if(c0 != '/' && c0 != '\\') {
-        path += File.separator + pathInfo;
+      if(c0 != '/' && c0 != '\\') path += File.separator;
+      try {
+        path += URLDecoder.decode(pathInfo, "UTF-8");
       }
-      else if(pathInfo.length() > 1) {
+      catch(Exception ex) {
         path += pathInfo;
       }
     }
@@ -94,10 +95,11 @@ class WCronConfig
     
     if(pathInfo != null && pathInfo.length() > 0) {
       char c0 = pathInfo.charAt(0);
-      if(c0 != '/' && c0 != '\\') {
-        path += File.separator + pathInfo;
+      if(c0 != '/' && c0 != '\\') path += File.separator;
+      try {
+        path += URLDecoder.decode(pathInfo, "UTF-8");
       }
-      else if(pathInfo.length() > 1) {
+      catch(Exception ex) {
         path += pathInfo;
       }
     }
