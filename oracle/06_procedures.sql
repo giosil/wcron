@@ -1,0 +1,27 @@
+--
+-- Procedures
+--
+
+CREATE OR REPLACE PROCEDURE CLEAN_DATA IS
+
+BEGIN
+  
+  DELETE FROM LOG_DATA;
+   
+  DELETE FROM JOBS;
+   
+  DELETE FROM ACTIVITIES;
+  
+  EXCEPTION
+    WHEN OTHERS THEN
+      RAISE;
+END CLEAN_DATA;
+/
+
+--
+-- Usage:
+--
+-- call CLEAN_DATA();
+--
+-- commit;
+--
