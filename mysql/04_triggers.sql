@@ -1,0 +1,40 @@
+--
+-- Triggers
+--
+
+DELIMITER $$
+CREATE TRIGGER trg_activities AFTER INSERT ON activities FOR EACH ROW BEGIN
+
+DECLARE vcUser varchar(50);
+
+SELECT CURRENT_USER()
+INTO vcUser;
+
+IF vcUser IS NOT NULL THEN
+  INSERT INTO LOG_DATA(TABLENAME,DB_USER,PK_VALUE,INS_DATE) VALUES('ACTIVITIES', vcUser, NEW.NAME, CURRENT_TIMESTAMP());
+END IF;
+
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE TRIGGER trg_jobs AFTER INSERT ON jobs FOR EACH ROW BEGIN
+
+DECLARE vcUser varchar(50);
+
+SELECT CURRENT_USER()
+INTO vcUser;
+
+IF vcUser IS NOT NULL THEN
+  INSERT INTO LOG_DATA(TABLENAME,DB_USER,PK_VALUE,INS_DATE) VALUES('JOBS', vcUser, CAST(NEW.ID AS CHAR), CURRENT_TIMESTAMP());
+END IF;
+
+END$$
+DELIMITER ;
+
+-- mysql --user=root --password[=password] wcron
+-- source C:/prj/dew/wcron/mysql/04_triggers.sql;
+--
+-- Check
+--
+-- show triggers;
