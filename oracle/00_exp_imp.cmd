@@ -1,3 +1,5 @@
+rem sc start OracleOraDb11g_home1TNSListener
+rem sc start OracleServiceORCL
 rem Export 
 
 exp WCRON/PASS123 FIlE=WCRON.dmp OWNER=WCRON STATISTICS=NONE

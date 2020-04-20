@@ -1,3 +1,4 @@
+rem sc start MySQL56
 rem Export
 rem mysqldump -u user -p[password] [database] > file
 rem mysqldump --user=user --password[=password] [database] > file
