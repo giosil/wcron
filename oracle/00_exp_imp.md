@@ -28,4 +28,4 @@ On Windows:
 - `use wcron`
 - `select table_name from all_tables;`
 - `desc ACTIVITIES;`
-- `@/path/script.sql`
+- `@/path/script.sql` or `start /path/script.sql`
