@@ -1,6 +1,9 @@
 body {
   padding-top: 30px;
 }
+label {
+  padding-right: 8px;
+}
 .starter-template {
   padding-top: 30px;
 }
