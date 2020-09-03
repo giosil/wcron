@@ -6,13 +6,13 @@ CREATE OR REPLACE FUNCTION ENCRYPT_TEXT(vcText IN VARCHAR2) RETURN VARCHAR2 IS
 vcResult VARCHAR2(2048);
 vcKey    VARCHAR2(32);
 BEGIN
-   vcResult := NULL;
-   vcKey    := 'A!190j2#Az10?#!@197AOIksu[&#$Y!0';
-   dbms_obfuscation_toolkit.DESEncrypt(input_string => RPAD(vcText, 48, ' '), key_string => vcKey, encrypted_string => vcResult);
-   RETURN vcResult;
-   EXCEPTION
-     WHEN OTHERS THEN
-       RAISE;
+  vcResult := NULL;
+  vcKey    := 'A!190j2#Az10?#!@197AOIksu[&#$Y!0';
+  dbms_obfuscation_toolkit.DESEncrypt(input_string => RPAD(vcText, 48, ' '), key_string => vcKey, encrypted_string => vcResult);
+  RETURN vcResult;
+  EXCEPTION
+    WHEN OTHERS THEN
+      RAISE;
 END ENCRYPT_TEXT;
 /
 
@@ -20,13 +20,13 @@ CREATE OR REPLACE FUNCTION DECRYPT_TEXT(vcText IN VARCHAR2) RETURN VARCHAR2 IS
 vcResult VARCHAR2(2048);
 vcKey    VARCHAR2(32);
 BEGIN
-   vcResult := NULL;
-   vcKey    := 'A!190j2#Az10?#!@197AOIksu[&#$Y!0';
-   dbms_obfuscation_toolkit.DESDecrypt(input_string => vcText, key_string => vcKey, decrypted_string => vcResult);
-   RETURN trim(vcResult);
-   EXCEPTION
-     WHEN OTHERS THEN
-       RAISE;
+  vcResult := NULL;
+  vcKey    := 'A!190j2#Az10?#!@197AOIksu[&#$Y!0';
+  dbms_obfuscation_toolkit.DESDecrypt(input_string => vcText, key_string => vcKey, decrypted_string => vcResult);
+  RETURN trim(vcResult);
+  EXCEPTION
+    WHEN OTHERS THEN
+      RAISE;
 END DECRYPT_TEXT;
 /
 

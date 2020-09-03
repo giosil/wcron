@@ -16,7 +16,7 @@ countJobs number;
 begin
   
   open c0;
-
+  
   loop
   fetch c0 into vcActName, tsInsDate;
     exit when c0%NOTFOUND;
@@ -36,7 +36,7 @@ begin
     end if;
     
   end loop;
-
+  
   close c0;
 end;
 /

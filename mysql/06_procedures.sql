@@ -7,9 +7,9 @@ CREATE PROCEDURE clean_data()
 BEGIN
 
   DELETE FROM LOG_DATA;
-   
+  
   DELETE FROM JOBS;
-   
+  
   DELETE FROM ACTIVITIES;
   
 END$$
