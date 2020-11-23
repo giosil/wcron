@@ -3,8 +3,8 @@
   <con:settings/>
   <con:interface xsi:type="con:RestService" id="60dba33f-98ae-4ad6-95ff-3527e1ca20e5" wadlVersion="http://wadl.dev.java.net/2009/02" name="WCron" type="rest" basePath="/wcron" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <con:settings/>
-    <con:definitionCache type="TEXT" rootPart=""/>
-    <con:endpoints>
+    
+    <con:definitionCache type="TEXT" rootPart=""/><con:endpoints>
       <con:endpoint>http://localhost:8080</con:endpoint>
     </con:endpoints>
     <con:resource name="info" path="/scheduler/manager/info" id="d9dca276-0636-4d65-95d1-dd0dfb489fcd">
