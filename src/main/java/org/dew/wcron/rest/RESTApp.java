@@ -24,6 +24,9 @@ class RESTApp extends Application
     
     // Services
     classes.add(RESTCronManager.class);
+    
+    // Providers
+    classes.add(CustomJsonBProvider.class);
   }
   
   @Override
