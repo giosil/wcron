@@ -59,15 +59,15 @@ class JobUtils
     }
     
     // Execution parameters
-    Map<String,Object> parameters = new HashMap<String, Object>();
+    Map<String, Object> parameters = new HashMap<String, Object>();
     
     // Activity parameters
-    Map<String,Object> actParameters = activity.getParameters();
+    Map<String, Object> actParameters = activity.getParameters();
     if(actParameters != null && !actParameters.isEmpty()) {
       parameters.putAll(actParameters);
     }
     // Job parameters
-    Map<String,Object> jobParameters = job.getParameters();
+    Map<String, Object> jobParameters = job.getParameters();
     if(jobParameters != null && !jobParameters.isEmpty()) {
       parameters.putAll(jobParameters);
     }
@@ -78,7 +78,7 @@ class JobUtils
   }
   
   public static
-  Callable<?> createJobInstance(String uri, long jobId, Map<String,Object> parameters)
+  Callable<?> createJobInstance(String uri, long jobId, Map<String, Object> parameters)
     throws Exception
   {
     if(uri == null || uri.length() == 0) {
