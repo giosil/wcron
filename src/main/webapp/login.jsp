@@ -40,10 +40,10 @@
   <form class="form-signin" method="POST" action="login">
     <h1>WCron</h1>
     
-    <label for="j_username" class="sr-only">Username</label>
+    <label for="<%= WAuthorization.PARAM_USER %>" class="sr-only">Username</label>
     <input type="text" id="<%= WAuthorization.PARAM_USER %>" name="<%= WAuthorization.PARAM_USER %>" class="form-control" placeholder="Username" value="<%= username %>" required autofocus>
     
-    <label for="j_password" class="sr-only">Password</label>
+    <label for="<%= WAuthorization.PARAM_PASS %>" class="sr-only">Password</label>
     <input type="password" id="<%= WAuthorization.PARAM_PASS %>" name="<%= WAuthorization.PARAM_PASS %>" class="form-control" placeholder="Password" required>
     
     <% if(message != null && message.length() > 0) { %>
