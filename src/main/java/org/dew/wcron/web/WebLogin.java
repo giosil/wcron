@@ -40,7 +40,7 @@ class WebLogin extends HttpServlet
     request.setAttribute("username", username);
     
     String password = request.getParameter(WAuthorization.PARAM_PASS);
-    if(username == null || username.length() == 0) {
+    if(password == null || password.length() == 0) {
       sendMessage(request, response, "Invalid password");
       return;
     }
