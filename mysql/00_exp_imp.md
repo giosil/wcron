@@ -37,6 +37,8 @@ Example:
 
 - `show databases;`
 - `select database() from dual;`
+- `select @@datadir;`
+- `purge binary logs before '2024-07-01 00:00:00';
 - `use wcron`
 - `show tables;`
 - `show full tables in wcron where table_type like 'VIEW';`
